@@ -115,24 +115,36 @@ d_long$Year <- factor(d_long$Year, levels = c("0","7","14","22","28"))
 
 ## BMI_28
 
-## waistcirc_28
+## waistcirc_28: (male:40, female:35)
 
-## HLD, LDL, TRI, CHOL
+## (merged_omics$hypertension <- as.numeric(merged_omics$sysBP_dxt_28 > 130 & merged_omics$diaBP_dxt_28 > 85) 
 
-merged_omics$hypertension <- as.numeric(merged_omics$sysBP_dxt_28 > 130 & merged_omics$diaBP_dxt_28 > 85) 
+
+## HLD
+## LDL
+## TRI
+## CHOL
+
+merged_omics_HILIC$hypertension <- as.numeric(merged_omics_HILIC$sysBP_dxt_28 > 130 & merged_omics_HILIC$diaBP_dxt_28 > 85) 
 
 # https://www.nhlbi.nih.gov/health/high-blood-pressure
-
-merged_omics$obesity <- 
 
 merged_omics$metabolic_disorder <- 
   
 # "insulinauc_28y"   
 # "glucoseauc_28y"  
 # "matsuda_28"       
-# "homair_28"        
+## "homair_28"        
 # "igi_28"
 
+merged_omics_HILIC$waist <- merged_omics_HILIC$waistcirc_28
+for (i in 1:nrow(merged_omics_HILIC)){
+  if (merged_omics_HILIC$sex[i]==0 & merged_omics_HILIC$waistcirc_28[i] > 35*2.54){merged_omics_HILIC$waist[i]=1}
+  else if(merged_omics_HILIC$sex[i]==0 & merged_omics_HILIC$waistcirc_28[i] <= 35*2.54){merged_omics_HILIC$waist[i]=0}
+  else if (merged_omics_HILIC$sex[i]==1 & merged_omics_HILIC$waistcirc_28[i] > 40*2.54){merged_omics_HILIC$waist[i]=1}
+  else if(merged_omics_HILIC$sex[i]==1 & merged_omics_HILIC$waistcirc_28[i] <= 40*2.54){merged_omics_HILIC$waist[i]=0}
+}
+  
 
 
 
