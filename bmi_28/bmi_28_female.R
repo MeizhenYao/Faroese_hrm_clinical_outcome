@@ -118,14 +118,14 @@ d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = N
 
 ## fit model between clinical outcomes and metabolites
 for(i in 1:1991){
-  s_lm <- (lm(bmi_28_female ~ data.bmi_28_female.met_age7[,i] + mage + age7 , data = data.bmi_28_female.met_age7))
+  s_lm <- (glm(bmi_28_female ~ data.bmi_28_female.met_age7[,i] + mage + age7, family = binomial(), data = data.bmi_28_female.met_age7))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
   std.err <- sqrt(diag(cov.m1))
   
   r.est <- cbind(
-    Estimate = coef(s_lm)
+    Estimate = exp(coef(s_lm))
     , "Robust SE" = std.err
     , z = (coef(s_lm)/std.err)
     , "Pr(>|z|) "= 2 * pnorm(abs(coef(s_lm)/std.err), lower.tail = FALSE))
@@ -179,14 +179,14 @@ data.bmi_28_female.met_age7$model_pval <- rep(NA_real_, nrow(data.bmi_28_female.
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:787){
-  s_lm <- (lm(bmi_28_female ~ data.bmi_28_female.met_age7[,i] +  mage + age7 , data = data.bmi_28_female.met_age7))
+  s_lm <- (glm(bmi_28_female ~ data.bmi_28_female.met_age7[,i] +  mage + age7 ,family = binomial(),  data = data.bmi_28_female.met_age7))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
   std.err <- sqrt(diag(cov.m1))
   
   r.est <- cbind(
-    Estimate = coef(s_lm)
+    Estimate = exp(coef(s_lm))
     , "Robust SE" = std.err
     , z = (coef(s_lm)/std.err)
     , "Pr(>|z|) "= 2 * pnorm(abs(coef(s_lm)/std.err), lower.tail = FALSE))
@@ -221,7 +221,7 @@ p_C18_bmi_28_female_age7<- 1/ (sum((et$values>1 + 0)* (et$values - 1)))
 # 0.001388889
 
 exwas_C18_bmi_28_female_age7$Met_id[exwas_C18_bmi_28_female_age7$p.value < p_C18_bmi_28_female_age7]
-# "Met564"
+# "(0)
 
 
 ###################################################################################################################
@@ -240,14 +240,14 @@ data.bmi_28_female.met_age14$model_pval <- rep(NA_real_, nrow(data.bmi_28_female
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:1991){
-  s_lm <- (lm(bmi_28_female ~ data.bmi_28_female.met_age14[,i] +  mage + age14 , data = data.bmi_28_female.met_age14))
+  s_lm <- (glm(bmi_28_female ~ data.bmi_28_female.met_age14[,i] +  mage + age14 ,family = binomial(),  data = data.bmi_28_female.met_age14))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
   std.err <- sqrt(diag(cov.m1))
   
   r.est <- cbind(
-    Estimate = coef(s_lm)
+    Estimate = exp(coef(s_lm))
     , "Robust SE" = std.err
     , z = (coef(s_lm)/std.err)
     , "Pr(>|z|) "= 2 * pnorm(abs(coef(s_lm)/std.err), lower.tail = FALSE))
@@ -282,7 +282,7 @@ p_HILIC_bmi_28_female_age14<- 1/ (sum((et$values>1 + 0)* (et$values - 1)))
 # 0.0005197505
 
 exwas_HILIC_bmi_28_female_age14$Met_id[exwas_HILIC_bmi_28_female_age14$p.value < p_HILIC_bmi_28_female_age14]
-# "Met367"  "Met395"  "Met640"  "Met1442" "Met1586"
+# "Met640"
 
 
 ###################################################################################################################
@@ -297,14 +297,14 @@ data.bmi_28_female.met_age14$model_pval <- rep(NA_real_, nrow(data.bmi_28_female
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:787){
-  s_lm <- (lm(bmi_28_female ~ data.bmi_28_female.met_age14[,i] +  mage + age14 , data = data.bmi_28_female.met_age14))
+  s_lm <- (glm(bmi_28_female ~ data.bmi_28_female.met_age14[,i] +  mage + age14 , family = binomial(), data = data.bmi_28_female.met_age14))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
   std.err <- sqrt(diag(cov.m1))
   
   r.est <- cbind(
-    Estimate = coef(s_lm)
+    Estimate = exp(coef(s_lm))
     , "Robust SE" = std.err
     , z = (coef(s_lm)/std.err)
     , "Pr(>|z|) "= 2 * pnorm(abs(coef(s_lm)/std.err), lower.tail = FALSE))
@@ -339,7 +339,7 @@ p_C18_bmi_28_female_age14<- 1/ (sum((et$values>1 + 0)* (et$values - 1)))
 #  0.001388889
 
 exwas_C18_bmi_28_female_age14$Met_id[exwas_C18_bmi_28_female_age14$p.value < p_C18_bmi_28_female_age14]
-#  "Met117" "Met366"
+#  "Met366"
 
 
 ###################################################################################################################
@@ -358,14 +358,14 @@ data.bmi_28_female.met_age22$model_pval <- rep(NA_real_, nrow(data.bmi_28_female
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:1991){
-  s_lm <- (lm(bmi_28_female ~ data.bmi_28_female.met_age22[,i] +  mage + age22 , data = data.bmi_28_female.met_age22))
+  s_lm <- (glm(bmi_28_female ~ data.bmi_28_female.met_age22[,i] +  mage + age22 ,family = binomial(),  data = data.bmi_28_female.met_age22))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
   std.err <- sqrt(diag(cov.m1))
   
   r.est <- cbind(
-    Estimate = coef(s_lm)
+    Estimate = exp(coef(s_lm))
     , "Robust SE" = std.err
     , z = (coef(s_lm)/std.err)
     , "Pr(>|z|) "= 2 * pnorm(abs(coef(s_lm)/std.err), lower.tail = FALSE))
@@ -400,7 +400,7 @@ p_HILIC_bmi_28_female_age22<- 1/ (sum((et$values>1 + 0)* (et$values - 1)))
 # 0.0005197505
 
 exwas_HILIC_bmi_28_female_age22$Met_id[exwas_HILIC_bmi_28_female_age22$p.value < p_HILIC_bmi_28_female_age22]
-# "Met1322" "Met1458"
+# character(0)
 
 
 ###################################################################################################################
@@ -415,14 +415,14 @@ data.bmi_28_female.met_age22$model_pval <- rep(NA_real_, nrow(data.bmi_28_female
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:787){
-  s_lm <- (lm(bmi_28_female ~ data.bmi_28_female.met_age22[,i] +  mage + age22 , data = data.bmi_28_female.met_age22))
+  s_lm <- (glm(bmi_28_female ~ data.bmi_28_female.met_age22[,i] +  mage + age22 ,family = binomial(),  data = data.bmi_28_female.met_age22))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
   std.err <- sqrt(diag(cov.m1))
   
   r.est <- cbind(
-    Estimate = coef(s_lm)
+    Estimate = exp(coef(s_lm))
     , "Robust SE" = std.err
     , z = (coef(s_lm)/std.err)
     , "Pr(>|z|) "= 2 * pnorm(abs(coef(s_lm)/std.err), lower.tail = FALSE))
@@ -457,7 +457,7 @@ p_C18_bmi_28_female_age22<- 1/ (sum((et$values>1 + 0)* (et$values - 1)))
 # 0.001388889
 
 exwas_C18_bmi_28_female_age22$Met_id[exwas_C18_bmi_28_female_age22$p.value < p_C18_bmi_28_female_age22]
-# "Met113" "Met128" "Met470" "Met495" "Met589"
+# "Met128"
 
 
 ###################################################################################################################
@@ -476,14 +476,14 @@ data.bmi_28_female.met_age28$model_pval <- rep(NA_real_, nrow(data.bmi_28_female
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:1991){
-  s_lm <- (lm(bmi_28_female ~ data.bmi_28_female.met_age28[,i] +  mage + age28 , data = data.bmi_28_female.met_age28))
+  s_lm <- (glm(bmi_28_female ~ data.bmi_28_female.met_age28[,i] +  mage + age28 , family = binomial(), data = data.bmi_28_female.met_age28))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
   std.err <- sqrt(diag(cov.m1))
   
   r.est <- cbind(
-    Estimate = coef(s_lm)
+    Estimate = exp(coef(s_lm))
     , "Robust SE" = std.err
     , z = (coef(s_lm)/std.err)
     , "Pr(>|z|) "= 2 * pnorm(abs(coef(s_lm)/std.err), lower.tail = FALSE))
@@ -518,7 +518,7 @@ p_HILIC_bmi_28_female_age28<- 1/ (sum((et$values>1 + 0)* (et$values - 1)))
 # 0.0005197505
 
 exwas_HILIC_bmi_28_female_age28$Met_id[exwas_HILIC_bmi_28_female_age28$p.value < p_HILIC_bmi_28_female_age28]
-# "Met981"
+# character(0)
 
 
 ###################################################################################################################
@@ -533,14 +533,14 @@ data.bmi_28_female.met_age28$model_pval <- rep(NA_real_, nrow(data.bmi_28_female
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:787){
-  s_lm <- (lm(bmi_28_female ~ data.bmi_28_female.met_age28[,i] +  mage + age28 , data = data.bmi_28_female.met_age28))
+  s_lm <- (glm(bmi_28_female ~ data.bmi_28_female.met_age28[,i] +  mage + age28 ,family = binomial(),  data = data.bmi_28_female.met_age28))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
   std.err <- sqrt(diag(cov.m1))
   
   r.est <- cbind(
-    Estimate = coef(s_lm)
+    Estimate = exp(coef(s_lm))
     , "Robust SE" = std.err
     , z = (coef(s_lm)/std.err)
     , "Pr(>|z|) "= 2 * pnorm(abs(coef(s_lm)/std.err), lower.tail = FALSE))
@@ -575,7 +575,7 @@ p_C18_bmi_28_female_age28<- 1/ (sum((et$values>1 + 0)* (et$values - 1)))
 # 0.001388889
 
 exwas_C18_bmi_28_female_age28$Met_id[exwas_C18_bmi_28_female_age28$p.value < p_C18_bmi_28_female_age28]
-#  "Met44"  "Met69"  "Met327" "Met584"
+#  character(0)
 
 
 ################################################################################################################################################################
@@ -742,7 +742,7 @@ exwas_bmi_28_female <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hosp
 exwas_bmi_28_female <- exwas_bmi_28_female[exwas_bmi_28_female$age!= "Age 28",]
 
 exwas_bmi_28_female$log10.p.value <- -log(exwas_bmi_28_female$p.value,10)
-exwas_bmi_28_female$age <- factor(exwas_bmi_28_female$age, levels = c('Age 7','Age 14', 'Age 22'))
+exwas_bmi_28_female$age <- factor(exwas_bmi_28_female$age, levels = c('Age 14', 'Age 22'))
 
 exwas_bmi_28_female$Metabolite <- rep(NA_character_,nrow(exwas_bmi_28_female))
 
@@ -758,18 +758,18 @@ pal <- wes_palette("Zissou1", 100, type = "continuous")
 vol <- (ggplot(exwas_bmi_28_female, aes(x=age, y=Beta, color=log10.p.value, label=Metabolite, shape = Mode)) +# Show all points
           geom_point(size = 3)+  
           scale_shape_manual(values = c(15,17)) + # change shape
-          geom_hline(yintercept= 0, color = "black", size = 1 )   +
+          geom_hline(yintercept= 1, color = "black", size = 1 )   +
           scale_color_gradientn(colours = pal) + # change color
-          labs(x = "Age at metabolomic assessment", y = "Beta Coefficients", 
-               title = "(A) Prospective metabolic exposures and BMI at age 28 (sex: Female)",
+          labs(x = "Age at metabolomic assessment", y = "OR", 
+               title = "(A) Prospective metabolic exposures and Overweight at age 28 (Female)",
                col = "-log10(p.value)") +
           theme_bw()+
           geom_label_repel(size = 6, family = 'serif',
                            fontface = 'bold',
                            box.padding = unit(0.5, "lines"),
                            max.iter = 2e4,
-                           max.overlaps = getOption("ggrepel.max.overlaps", default = 40),
-                           force = 2, force_pull = 2, show.legend = F) ) # add label for each point 
+                           max.overlaps = getOption("ggrepel.max.overlaps", default = 100),
+                           force = 2, force_pull = 2, show.legend = F)) # add label for each point 
 
 vol <-  (vol + theme(plot.title=element_text(size=16,face="bold"),
                      axis.title=element_text(size=14,face="bold"),
@@ -782,11 +782,11 @@ vol <-  (vol + theme(plot.title=element_text(size=16,face="bold"),
                      legend.background = element_rect(fill="white", 
                                                       linewidth=0.5, linetype="solid",  colour ="darkblue"),
                      plot.margin=unit(c(0.5,0.5,1,1.5), "cm")) +
-           ylim(c(-1,1)) +
-           annotate("rect", xmin = c(0.75, 1.75, 2.75), 
-                    xmax = c(1.25, 2.25, 3.25), 
-                    ymin = c(-1, -1, -1), 
-                    ymax =rep(1,2,3),
+           ylim(c(-0.5,2.5)) +
+           annotate("rect", xmin = c(0.75, 1.75), 
+                    xmax = c(1.25, 2.25), 
+                    ymin = c(-0.5, -0.5), 
+                    ymax = c(2.5, 2.5),
                     alpha = 0.05))
 
 
@@ -839,7 +839,7 @@ HILIC_bmi_28_female$Mode <- rep("HILIC+", nrow(HILIC_bmi_28_female))
 
 pathways_bmi_28_female <- rbind(C18_bmi_28_female, HILIC_bmi_28_female)
 colnames(pathways_bmi_28_female)[1] <- "Pathways"
-pathways_bmi_28_female$age <- factor(pathways_bmi_28_female$age, levels = c("7","14","22"))
+pathways_bmi_28_female$age <- factor(pathways_bmi_28_female$age, levels = c("7","14"))
 
 pfas_pathway_subset <- pathways_bmi_28_female[pathways_bmi_28_female$FET < 0.05,]
 
@@ -847,17 +847,11 @@ all_pathways <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/Ne
 pfas_pathway_subset <- merge(pfas_pathway_subset, all_pathways, by.x = "Pathways")
 
 
-pfas_pathway_subset$Group <- factor(pfas_pathway_subset$Group, levels = c("Carbohydrate metabolism",
-                                                                          "Lipid metabolism",
-                                                                          "Metabolism of amino acids and derivatives", 
-                                                                          "Metabolism of vitamins and cofactors", 
+pfas_pathway_subset$Group <- factor(pfas_pathway_subset$Group, levels = c("Metabolism of amino acids and derivatives", 
                                                                           "Xenobiotics biodegradation and metabolism"
 ))
 
-groups <- c("Carbohydrate metabolism",
-            "Lipid metabolism",
-            "Metabolism of amino acids and derivatives", 
-            "Metabolism of vitamins and cofactors", 
+groups <- c("Metabolism of amino acids and derivatives", 
             "Xenobiotics biodegradation and metabolism")
 
 pfas_pathway_subset <- pfas_pathway_subset[order(pfas_pathway_subset$Group),]
@@ -866,10 +860,7 @@ uni_paths <- uni_paths[!duplicated(uni_paths)]
 pfas_pathway_subset$Pathways <- factor(pfas_pathway_subset$Pathways, levels = uni_paths)
 
 ret <- c(length(unique(pfas_pathway_subset$Pathways[pfas_pathway_subset$Group ==  unique(pfas_pathway_subset$Group)[1]])),
-         length(unique(pfas_pathway_subset$Pathways[pfas_pathway_subset$Group ==  unique(pfas_pathway_subset$Group)[2]])),
-         length(unique(pfas_pathway_subset$Pathways[pfas_pathway_subset$Group ==  unique(pfas_pathway_subset$Group)[3]])),
-         length(unique(pfas_pathway_subset$Pathways[pfas_pathway_subset$Group ==  unique(pfas_pathway_subset$Group)[4]])),
-         length(unique(pfas_pathway_subset$Pathways[pfas_pathway_subset$Group ==  unique(pfas_pathway_subset$Group)[5]]))
+         length(unique(pfas_pathway_subset$Pathways[pfas_pathway_subset$Group ==  unique(pfas_pathway_subset$Group)[2]]))
 )
 
 gp <- (ggplot(pfas_pathway_subset, aes(x = age,  y = Pathways)) + 
@@ -878,7 +869,7 @@ gp <- (ggplot(pfas_pathway_subset, aes(x = age,  y = Pathways)) +
                     position = position_dodge2(width = 0.5, preserve  = "total", padding = 0.5, reverse = T)) + 
          theme_bw()   + scale_shape_manual(values = c(15,17)) +
          ylab(NULL) + xlab("Age at Metabolomic Assessment") +
-         ggtitle("(B) Enriched pathways in association between\nserum Metabolites and BMI at age 28 (sex: Female)") + 
+         ggtitle("(B) Enriched pathways in association between\nserum Metabolites and Overweight at age 28 (Female)") + 
          labs(size = "-log10(p.value)") +
          theme(plot.title=element_text(size=16,face="bold"), 
                axis.title=element_text(size=14,face="bold"),
@@ -893,23 +884,20 @@ gp <- (ggplot(pfas_pathway_subset, aes(x = age,  y = Pathways)) +
                plot.margin=unit(c(0.5,0.5,1,0.5), "cm")) +
          annotate("rect", xmin = c(0.75,1.75), # change x groups
                    xmax = c(1.25,2.25),
-                   ymin = rep(0,2), ymax =rep(8.5,2),
+                   ymin = rep(0,2), ymax =rep(4.5,2),
                    alpha = .1)+  
         guides(color = guide_legend(override.aes = list(size = 4)),
                 shape = guide_legend(override.aes = list(size = 4))))
 
 gp <- (gp +  
         geom_hline(yintercept = c(cumsum(ret))+0.5)+
-        geom_hline(yintercept = 8.5, size = 2)+
+        geom_hline(yintercept = 4.5, size = 2)+
         annotate("text", x = rep(4.9, length(unique(pfas_pathway_subset$Group))), 
-                  y = c(0.8, 2, 5, 7, 8), # adjust position of red label
-                  label = c("Carbohydrate metabolism",
-                            "Lipid metabolism",
-                            "Metabolism of amino acids\nand derivatives", 
-                            "Metabolism of vitamins\nand cofactors", 
+                  y = c(1.8,  4), # adjust position of red label
+                  label = c("Metabolism of amino acids\nand derivatives", 
                             "Xenobiotics biodegradation\nand metabolism"), color = "red",
                   size = rep(5, length(groups)), fontface  = 'bold')+
-        coord_cartesian(xlim = c(1.2, 6), ylim = c(0.5, 8), clip = "off") )
+        coord_cartesian(xlim = c(1.2, 6), ylim = c(0.5, 4), clip = "off") )
 
 jpeg("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese//hrm_clinical_outcome/bmi/bmi_28_female/pathways_bmi_28_female.jpeg",
      units="in", width=12, height=10, res=600)
