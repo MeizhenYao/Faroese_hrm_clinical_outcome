@@ -126,24 +126,44 @@ for (i in 1:nrow(merged_omics_HILIC)){
 
 
 ## (merged_omics$hypertension <- as.numeric(merged_omics$sysBP_dxt_28 > 130 & merged_omics$diaBP_dxt_28 > 85) 
+bmi
+bmi_bi
+# waist/height ratio
 
-
+##--------------------- metabolic syndrome:yes or no
+metabolic syndrome 
 ## HLD
 ## LDL
 ## TRI
 ## CHOL
 
-merged_omics_HILIC$hypertension <- as.numeric(merged_omics_HILIC$sysBP_dxt_28 > 130 & merged_omics_HILIC$diaBP_dxt_28 > 85) 
+##--------------------- maybe pre-hypertension
+merged_omics_HILIC$pre_hypertension <- as.numeric(merged_omics_HILIC$sysBP_dxt_28 > 120 & merged_omics_HILIC$diaBP_dxt_28 > 80) 
+# 
+# # https://www.nhlbi.nih.gov/health/high-blood-pressure
+# 
+# merged_omics$metabolic_disorder <- 
 
-# https://www.nhlbi.nih.gov/health/high-blood-pressure
+##--------------------- continuous
+"insulinauc_28y"   
+"glucoseauc_28y"  
+"matsuda_28"       
+"homair_28"        
+"igi_28"
 
-merged_omics$metabolic_disorder <- 
-  
-# "insulinauc_28y"   
-# "glucoseauc_28y"  
-# "matsuda_28"       
-## "homair_28"        
-# "igi_28"
+
+##--------------------- metabolic syndrome:yes or no
+merged_omics_HILIC_age7$mets <- merged_omics_HILIC_age7$trig_28y
+for (i in 1:nrow(merged_omics_HILIC_age7)){
+  if (merged_omics_HILIC_age7$sex[i]==0 & merged_omics_HILIC_age7$uhdl_28y[i] < 1.293 & merged_omics_HILIC_age7$trig_28y[i] >= 1.6935){merged_omics_HILIC_age7$mets[i]="mixed"}
+  else if (merged_omics_HILIC_age7$sex[i]==0 & merged_omics_HILIC_age7$uhdl_28y[i] < 1.293 & merged_omics_HILIC_age7$trig_28y[i] < 1.6935){merged_omics_HILIC_age7$mets[i]="hypo"}
+  else if (merged_omics_HILIC_age7$sex[i]==0 & merged_omics_HILIC_age7$uhdl_28y[i] > 1.293 & merged_omics_HILIC_age7$trig_28y[i] >= 1.6935){merged_omics_HILIC_age7$mets[i]="hyper"}
+  else if (merged_omics_HILIC_age7$sex[i]==0 & merged_omics_HILIC_age7$uhdl_28y[i] > 1.293 & merged_omics_HILIC_age7$trig_28y[i] < 1.6935){merged_omics_HILIC_age7$mets[i]="no"}
+  else if (merged_omics_HILIC_age7$sex[i]==1 & merged_omics_HILIC_age7$uhdl_28y[i] < 1.0344 & merged_omics_HILIC_age7$trig_28y[i] >= 1.6935){merged_omics_HILIC_age7$mets[i]="mixed"}
+  else if (merged_omics_HILIC_age7$sex[i]==1 & merged_omics_HILIC_age7$uhdl_28y[i] < 1.0344 & merged_omics_HILIC_age7$trig_28y[i] < 1.6935){merged_omics_HILIC_age7$mets[i]="hypo"}
+  else if (merged_omics_HILIC_age7$sex[i]==1 & merged_omics_HILIC_age7$uhdl_28y[i] > 1.0344 & merged_omics_HILIC_age7$trig_28y[i] >= 1.6935){merged_omics_HILIC_age7$mets[i]="hyper"}
+  else if (merged_omics_HILIC_age7$sex[i]==1 & merged_omics_HILIC_age7$uhdl_28y[i] > 1.0344 & merged_omics_HILIC_age7$trig_28y[i] < 1.6935){merged_omics_HILIC_age7$mets[i]="no"}
+}
 
 
 

@@ -111,7 +111,7 @@ d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = N
 
 ## fit model between clinical outcomes and metabolites
 for(i in 1:1991){
-  s_lm <- (lm(glucoseauc_28y ~ data.glucoseauc_28y.met_age7[,i] + sex + mage + age7 , data = data.glucoseauc_28y.met_age7))
+  s_lm <- (lm(glucoseauc_28y ~ data.glucoseauc_28y.met_age7[,i] + sex + age7 , data = data.glucoseauc_28y.met_age7))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
@@ -156,7 +156,7 @@ et <- eigen(ght)
 # 0.0005356186
 
 exwas_HILIC_glucoseauc_28y_age7$Met_id[exwas_HILIC_glucoseauc_28y_age7$p.value < 0.0005356186]
-# "Met1100"
+# "Met478"  "Met1100"
 
 
 ###################################################################################################################
@@ -171,7 +171,7 @@ data.glucoseauc_28y.met_age7$model_pval <- rep(NA_real_, nrow(data.glucoseauc_28
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:787){
-  s_lm <- (lm(glucoseauc_28y ~ data.glucoseauc_28y.met_age7[,i] + sex + mage + age7 , data = data.glucoseauc_28y.met_age7))
+  s_lm <- (lm(glucoseauc_28y ~ data.glucoseauc_28y.met_age7[,i] + sex + age7 , data = data.glucoseauc_28y.met_age7))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
@@ -232,7 +232,7 @@ data.glucoseauc_28y.met_age14$model_pval <- rep(NA_real_, nrow(data.glucoseauc_2
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:1991){
-  s_lm <- (lm(glucoseauc_28y ~ data.glucoseauc_28y.met_age14[,i] + sex + mage + age14 , data = data.glucoseauc_28y.met_age14))
+  s_lm <- (lm(glucoseauc_28y ~ data.glucoseauc_28y.met_age14[,i] + sex + age14 , data = data.glucoseauc_28y.met_age14))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
@@ -274,7 +274,7 @@ et <- eigen(ght)
 # 0.0005356186
 
 exwas_HILIC_glucoseauc_28y_age14$Met_id[exwas_HILIC_glucoseauc_28y_age14$p.value < 0.0005356186]
-# "Met43"   "Met64"   "Met1800"
+# "Met43"   "Met1800"
 
 
 ###################################################################################################################
@@ -289,7 +289,7 @@ data.glucoseauc_28y.met_age14$model_pval <- rep(NA_real_, nrow(data.glucoseauc_2
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:787){
-  s_lm <- (lm(glucoseauc_28y ~ data.glucoseauc_28y.met_age14[,i] + sex + mage + age14 , data = data.glucoseauc_28y.met_age14))
+  s_lm <- (lm(glucoseauc_28y ~ data.glucoseauc_28y.met_age14[,i] + sex + age14 , data = data.glucoseauc_28y.met_age14))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
@@ -331,8 +331,7 @@ et <- eigen(ght)
 # 0.001507908
 
 exwas_C18_glucoseauc_28y_age14$Met_id[exwas_C18_glucoseauc_28y_age14$p.value < 0.001507908]
-#  "Met21"  "Met66"  "Met134" "Met144" "Met164" "Met183" "Met388" "Met476" "Met598" "Met603"
-# [11] "Met674"
+#  "Met21"  "Met66"  "Met134" "Met144" "Met164" "Met183" "Met388" "Met476" "Met598" "Met674"
 
 
 ###################################################################################################################
@@ -351,7 +350,7 @@ data.glucoseauc_28y.met_age22$model_pval <- rep(NA_real_, nrow(data.glucoseauc_2
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:1991){
-  s_lm <- (lm(glucoseauc_28y ~ data.glucoseauc_28y.met_age22[,i] + sex + mage + age22 , data = data.glucoseauc_28y.met_age22))
+  s_lm <- (lm(glucoseauc_28y ~ data.glucoseauc_28y.met_age22[,i] + sex + age22 , data = data.glucoseauc_28y.met_age22))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
@@ -393,7 +392,7 @@ et <- eigen(ght)
 # 0.0005356186
 
 exwas_HILIC_glucoseauc_28y_age22$Met_id[exwas_HILIC_glucoseauc_28y_age22$p.value < 0.0005356186]
-# "Met724" "Met747" "Met968"
+# "Met724" "Met747" "Met968"  "Met1882"
 
 
 ###################################################################################################################
@@ -408,7 +407,7 @@ data.glucoseauc_28y.met_age22$model_pval <- rep(NA_real_, nrow(data.glucoseauc_2
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:787){
-  s_lm <- (lm(glucoseauc_28y ~ data.glucoseauc_28y.met_age22[,i] + sex + mage + age22 , data = data.glucoseauc_28y.met_age22))
+  s_lm <- (lm(glucoseauc_28y ~ data.glucoseauc_28y.met_age22[,i] + sex + age22 , data = data.glucoseauc_28y.met_age22))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
@@ -468,7 +467,7 @@ data.glucoseauc_28y.met_age28$model_pval <- rep(NA_real_, nrow(data.glucoseauc_2
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:1991){
-  s_lm <- (lm(glucoseauc_28y ~ data.glucoseauc_28y.met_age28[,i] + sex + mage + age28 , data = data.glucoseauc_28y.met_age28))
+  s_lm <- (lm(glucoseauc_28y ~ data.glucoseauc_28y.met_age28[,i] + sex + age28 , data = data.glucoseauc_28y.met_age28))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
@@ -525,7 +524,7 @@ data.glucoseauc_28y.met_age28$model_pval <- rep(NA_real_, nrow(data.glucoseauc_2
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:787){
-  s_lm <- (lm(glucoseauc_28y ~ data.glucoseauc_28y.met_age28[,i] + sex + mage + age28 , data = data.glucoseauc_28y.met_age28))
+  s_lm <- (lm(glucoseauc_28y ~ data.glucoseauc_28y.met_age28[,i] + sex + age28 , data = data.glucoseauc_28y.met_age28))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
@@ -564,13 +563,12 @@ exwas_C18_glucoseauc_28y_age28$Mode <- rep("C18",nrow(exwas_C18_glucoseauc_28y_a
 ght <- cor(cbind(merged_omics_C18_age28[,paste0("Met",seq(1:nrow(data_C18)))]))
 et <- eigen(ght)
 1/ (sum((et$values>1 + 0)* (et$values - 1)))
-# 0.001508217
+# 0.001508293
 
 exwas_C18_glucoseauc_28y_age28$Met_id[exwas_C18_glucoseauc_28y_age28$p.value < 0.001508293]
-# [1] "Met327" "Met351" "Met373" "Met580" "Met585" "Met586" "Met587" "Met590" "Met592" "Met595"
-# [11] "Met604" "Met607" "Met608" "Met614" "Met618" "Met619" "Met620" "Met627" "Met631" "Met634"
-# [21] "Met639" "Met640" "Met645" "Met647" "Met693" "Met700" "Met727" "Met740" "Met743" "Met747"
-# [31] "Met749" "Met755" "Met761" "Met763" "Met765" "Met767" "Met772"
+# [1] "Met36"  "Met96"  "Met327" "Met351" "Met373" "Met580" "Met585" "Met586" "Met590" "Met592" "Met604" "Met607" "Met608" "Met614"
+# [15] "Met618" "Met619" "Met620" "Met622" "Met627" "Met631" "Met639" "Met640" "Met645" "Met679" "Met693" "Met700" "Met740" "Met743"
+# [29] "Met747" "Met749" "Met755" "Met761" "Met764" "Met767" "Met772"
 
 
 ################################################################################################################################################################
@@ -585,7 +583,7 @@ exwas_C18_glucoseauc_28y_age28$Met_id[exwas_C18_glucoseauc_28y_age28$p.value < 0
 
 exwas_C18_glucoseauc_28y_age7 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/glucoseauc/glucoseauc_28y/exwas_C18_glucoseauc_28y_age7.csv")
 exwas_C18_glucoseauc_28y_age7$Mode <- rep("C18",nrow(exwas_C18_glucoseauc_28y_age7))
-exwas_C18_glucoseauc_28y_age7 <- exwas_C18_glucoseauc_28y_age7[exwas_C18_glucoseauc_28y_age7$p.value < 0.001508217,]
+exwas_C18_glucoseauc_28y_age7 <- exwas_C18_glucoseauc_28y_age7[exwas_C18_glucoseauc_28y_age7$p.value < 0.001507876,]
 exwas_C18_glucoseauc_28y_age7$age <- rep("Age 7", nrow(exwas_C18_glucoseauc_28y_age7))
 
 exwas_HILIC_glucoseauc_28y_age7 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/glucoseauc/glucoseauc_28y/exwas_HILIC_glucoseauc_28y_age7.csv")
@@ -597,7 +595,7 @@ exwas_HILIC_glucoseauc_28y_age7$age <- rep("Age 7", nrow(exwas_HILIC_glucoseauc_
 
 exwas_C18_glucoseauc_28y_age14 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/glucoseauc/glucoseauc_28y/exwas_C18_glucoseauc_28y_age14.csv")
 exwas_C18_glucoseauc_28y_age14$Mode <- rep("C18",nrow(exwas_C18_glucoseauc_28y_age14))
-exwas_C18_glucoseauc_28y_age14 <- exwas_C18_glucoseauc_28y_age14[exwas_C18_glucoseauc_28y_age14$p.value < 0.001508217,]
+exwas_C18_glucoseauc_28y_age14 <- exwas_C18_glucoseauc_28y_age14[exwas_C18_glucoseauc_28y_age14$p.value < 0.001507908,]
 exwas_C18_glucoseauc_28y_age14$age <- rep("Age 14", nrow(exwas_C18_glucoseauc_28y_age14))
 
 
@@ -623,7 +621,7 @@ exwas_HILIC_glucoseauc_28y_age22$age <- rep("Age 22", nrow(exwas_HILIC_glucoseau
 
 exwas_C18_glucoseauc_28y_age28 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/glucoseauc/glucoseauc_28y/exwas_C18_glucoseauc_28y_age28.csv")
 exwas_C18_glucoseauc_28y_age28$Mode <- rep("C18",nrow(exwas_C18_glucoseauc_28y_age28))
-exwas_C18_glucoseauc_28y_age28 <- exwas_C18_glucoseauc_28y_age28[exwas_C18_glucoseauc_28y_age28$p.value < 0.001508217,]
+exwas_C18_glucoseauc_28y_age28 <- exwas_C18_glucoseauc_28y_age28[exwas_C18_glucoseauc_28y_age28$p.value < 0.001508293,]
 exwas_C18_glucoseauc_28y_age28$age <- rep("Age 28", nrow(exwas_C18_glucoseauc_28y_age28))
 
 
@@ -840,20 +838,17 @@ pfas_pathway_subset <- pathways_glucoseauc_28y[pathways_glucoseauc_28y$FET < 0.0
 all_pathways <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/all_pathways.csv")
 pfas_pathway_subset <- merge(pfas_pathway_subset, all_pathways, by.x = "Pathways")
 
-pfas_pathway_subset$Group <- factor(pfas_pathway_subset$Group, levels = c("Glycan biosynthesis and metabolism",
+pfas_pathway_subset$Group <- factor(pfas_pathway_subset$Group, levels = c("Carbohydrate metabolism",
+                                                                          "Glycan biosynthesis and metabolism",
                                                                           "Lipid metabolism",
-                                                                          "Metabolism of amino acids and derivatives", 
-                                                                          "Metabolism of vitamins and cofactors", 
-                                                                          "Nucleotide metabolism",
-                                                                          "Xenobiotics biodegradation and metabolism"
-                                                                          ))
+                                                                          "Metabolism of amino acids and derivatives",
+                                                                          "Nucleotide metabolism"))
 
-groups <- c("Glycan biosynthesis and metabolism",
+groups <- c("Carbohydrate metabolism",
+            "Glycan biosynthesis and metabolism",
             "Lipid metabolism",
-            "Metabolism of amino acids and derivatives", 
-            "Metabolism of vitamins and cofactors", 
-            "Nucleotide metabolism",
-            "Xenobiotics biodegradation and metabolism")
+            "Metabolism of amino acids and derivatives",
+            "Nucleotide metabolism")
             
 pfas_pathway_subset <- pfas_pathway_subset[order(pfas_pathway_subset$Group),]
 uni_paths <- pfas_pathway_subset$Pathways
@@ -886,23 +881,22 @@ gp <- (ggplot(pfas_pathway_subset, aes(x = age,  y = Pathways)) +
                plot.margin=unit(c(0.5,0.5,1,0.5), "cm"))
        +  annotate("rect", xmin = seq(0.75,2.75), 
                    xmax = seq(1.25,3.25), 
-                   ymin = rep(0,3), ymax =rep(13,3),
+                   ymin = rep(0,3), ymax =rep(15,3),
                    alpha = .1)  
        + guides(color = guide_legend(override.aes = list(size = 4)),
                 shape = guide_legend(override.aes = list(size = 4))))
 
 gp <- (gp +  geom_hline(yintercept = c(cumsum(ret))+0.5)
-       + geom_hline(yintercept = 13, size = 2)
+       + geom_hline(yintercept = 15, size = 2)
        + annotate("text", x = rep(4.9, length(unique(pfas_pathway_subset$Group))), 
-                  y = c(0.8, 2.5,5.5, 9, 10, 12.2), 
-                  label = c("Glycan biosynthesis\nand metabolism",
+                  y = c(0.8, 4,6, 9.5,14), 
+                  label = c("Carbohydrate metabolism",
+                            "Glycan biosynthesis\nand metabolism",
                             "Lipid metabolism",
-                            "Metabolism of amino acids\nand derivatives", 
-                            "Metabolism of vitamins\nand cofactors", 
-                            "Nucleotide metabolism",
-                            "Xenobiotics biodegradation\nand metabolism"), color = "red",
+                            "Metabolism of amino acids\nand derivatives",
+                            "Nucleotide metabolism"), color = "red",
                   size = rep(5, length(groups)), fontface  = 'bold')
-       + coord_cartesian(xlim = c(1.2, 6), ylim = c(0.5, 12.5), clip = "off") )
+       + coord_cartesian(xlim = c(1.2, 6), ylim = c(0.5, 14.5), clip = "off") )
 
 jpeg("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese//hrm_clinical_outcome/glucoseauc/glucoseauc_28y/pathways_glucoseauc_28y.jpeg",
      units="in", width=12, height=10, res=600)

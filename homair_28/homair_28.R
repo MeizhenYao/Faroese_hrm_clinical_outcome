@@ -110,7 +110,7 @@ d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = N
 
 ## fit model between clinical outcomes and metabolites
 for(i in 1:1991){
-  s_lm <- (lm(homair_28 ~ data.homair_28.met_age7[,i] + sex + mage + age7 , data = data.homair_28.met_age7))
+  s_lm <- (lm(homair_28 ~ data.homair_28.met_age7[,i] + sex + age7 , data = data.homair_28.met_age7))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
@@ -170,7 +170,7 @@ data.homair_28.met_age7$model_pval <- rep(NA_real_, nrow(data.homair_28.met_age7
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:787){
-  s_lm <- (lm(homair_28 ~ data.homair_28.met_age7[,i] + sex + mage + age7 , data = data.homair_28.met_age7))
+  s_lm <- (lm(homair_28 ~ data.homair_28.met_age7[,i] + sex + age7 , data = data.homair_28.met_age7))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
@@ -212,7 +212,7 @@ et <- eigen(ght)
 # 0.001507876
 
 exwas_C18_homair_28_age7$Met_id[exwas_C18_homair_28_age7$p.value < 0.001507876]
-# character(0)
+# "Met183"
 
 
 ###################################################################################################################
@@ -231,7 +231,7 @@ data.homair_28.met_age14$model_pval <- rep(NA_real_, nrow(data.homair_28.met_age
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:1991){
-  s_lm <- (lm(homair_28 ~ data.homair_28.met_age14[,i] + sex + mage + age14 , data = data.homair_28.met_age14))
+  s_lm <- (lm(homair_28 ~ data.homair_28.met_age14[,i] + sex + age14 , data = data.homair_28.met_age14))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
@@ -288,7 +288,7 @@ data.homair_28.met_age14$model_pval <- rep(NA_real_, nrow(data.homair_28.met_age
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:787){
-  s_lm <- (lm(homair_28 ~ data.homair_28.met_age14[,i] + sex + mage + age14 , data = data.homair_28.met_age14))
+  s_lm <- (lm(homair_28 ~ data.homair_28.met_age14[,i] + sex + age14 , data = data.homair_28.met_age14))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
@@ -330,7 +330,7 @@ et <- eigen(ght)
 # 0.001507908
 
 exwas_C18_homair_28_age14$Met_id[exwas_C18_homair_28_age14$p.value < 0.001507908]
-#  "Met8"   "Met12"  "Met134" "Met217" "Met382" "Met384"
+#  "Met8"   "Met12"  "Met134" "Met217" "Met384"
 
 
 ###################################################################################################################
@@ -349,7 +349,7 @@ data.homair_28.met_age22$model_pval <- rep(NA_real_, nrow(data.homair_28.met_age
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:1991){
-  s_lm <- (lm(homair_28 ~ data.homair_28.met_age22[,i] + sex + mage + age22 , data = data.homair_28.met_age22))
+  s_lm <- (lm(homair_28 ~ data.homair_28.met_age22[,i] + sex + age22 , data = data.homair_28.met_age22))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
@@ -406,7 +406,7 @@ data.homair_28.met_age22$model_pval <- rep(NA_real_, nrow(data.homair_28.met_age
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:787){
-  s_lm <- (lm(homair_28 ~ data.homair_28.met_age22[,i] + sex + mage + age22 , data = data.homair_28.met_age22))
+  s_lm <- (lm(homair_28 ~ data.homair_28.met_age22[,i] + sex + age22 , data = data.homair_28.met_age22))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
@@ -448,7 +448,7 @@ et <- eigen(ght)
 # 0.001508217
 
 exwas_C18_homair_28_age22$Met_id[exwas_C18_homair_28_age22$p.value < 0.001508217]
-#  "Met339" "Met673" "Met727"
+#  "Met252" "Met339" "Met673" "Met727"
 
 ###################################################################################################################
 ###################################################################################################################
@@ -466,7 +466,7 @@ data.homair_28.met_age28$model_pval <- rep(NA_real_, nrow(data.homair_28.met_age
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:1991){
-  s_lm <- (lm(homair_28 ~ data.homair_28.met_age28[,i] + sex + mage + age28 , data = data.homair_28.met_age28))
+  s_lm <- (lm(homair_28 ~ data.homair_28.met_age28[,i] + sex + age28 , data = data.homair_28.met_age28))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
@@ -508,10 +508,10 @@ et <- eigen(ght)
 # 0.0005356186
 
 exwas_HILIC_homair_28_age28$Met_id[exwas_HILIC_homair_28_age28$p.value < 0.0005356186]
-#  [1] "Met5"    "Met12"   "Met15"   "Met23"   "Met31"   "Met207"  "Met377"  "Met412"  "Met424"  "Met433" 
-# [11] "Met496"  "Met509"  "Met510"  "Met606"  "Met712"  "Met723"  "Met728"  "Met1017" "Met1022" "Met1131"
-# [21] "Met1242" "Met1261" "Met1311" "Met1317" "Met1431" "Met1441" "Met1470" "Met1597" "Met1741" "Met1772"
-# [31] "Met1780" "Met1883" "Met1948"
+# "Met5"    "Met12"   "Met15"   "Met23"   "Met31"   "Met57"   "Met99"   "Met377"  "Met412"  "Met424"  "Met433" 
+# [12] "Met496"  "Met509"  "Met510"  "Met606"  "Met712"  "Met723"  "Met728"  "Met1017" "Met1022" "Met1131" "Met1242"
+# [23] "Met1261" "Met1277" "Met1311" "Met1317" "Met1431" "Met1441" "Met1470" "Met1597" "Met1741" "Met1772" "Met1883"
+# [34] "Met1948"
 
 
 ###################################################################################################################
@@ -526,7 +526,7 @@ data.homair_28.met_age28$model_pval <- rep(NA_real_, nrow(data.homair_28.met_age
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:787){
-  s_lm <- (lm(homair_28 ~ data.homair_28.met_age28[,i] + sex + mage + age28 , data = data.homair_28.met_age28))
+  s_lm <- (lm(homair_28 ~ data.homair_28.met_age28[,i] + sex + age28 , data = data.homair_28.met_age28))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
@@ -568,8 +568,8 @@ et <- eigen(ght)
 # 0.001508217
 
 exwas_C18_homair_28_age28$Met_id[exwas_C18_homair_28_age28$p.value < 0.001508293]
-#   [1] "Met5"   "Met45"  "Met69"  "Met86"  "Met196" "Met219" "Met406" "Met425" "Met475" "Met500" "Met554"
-# [12] "Met708"
+# [1] "Met5"   "Met45"  "Met69"  "Met86"  "Met96"  "Met196" "Met216" "Met219" "Met273" "Met425" "Met475" "Met500"
+# [13] "Met554" "Met708"
 
 
 ################################################################################################################################################################
@@ -584,7 +584,7 @@ exwas_C18_homair_28_age28$Met_id[exwas_C18_homair_28_age28$p.value < 0.001508293
 
 exwas_C18_homair_28_age7 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/homair/homair_28/exwas_C18_homair_28_age7.csv")
 exwas_C18_homair_28_age7$Mode <- rep("C18",nrow(exwas_C18_homair_28_age7))
-exwas_C18_homair_28_age7 <- exwas_C18_homair_28_age7[exwas_C18_homair_28_age7$p.value < 0.001508217,]
+exwas_C18_homair_28_age7 <- exwas_C18_homair_28_age7[exwas_C18_homair_28_age7$p.value < 0.001507876,]
 exwas_C18_homair_28_age7$age <- rep("Age 7", nrow(exwas_C18_homair_28_age7))
 
 exwas_HILIC_homair_28_age7 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/homair/homair_28/exwas_HILIC_homair_28_age7.csv")
@@ -596,7 +596,7 @@ exwas_HILIC_homair_28_age7$age <- rep("Age 7", nrow(exwas_HILIC_homair_28_age7))
 
 exwas_C18_homair_28_age14 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/homair/homair_28/exwas_C18_homair_28_age14.csv")
 exwas_C18_homair_28_age14$Mode <- rep("C18",nrow(exwas_C18_homair_28_age14))
-exwas_C18_homair_28_age14 <- exwas_C18_homair_28_age14[exwas_C18_homair_28_age14$p.value < 0.001508217,]
+exwas_C18_homair_28_age14 <- exwas_C18_homair_28_age14[exwas_C18_homair_28_age14$p.value < 0.001507908,]
 exwas_C18_homair_28_age14$age <- rep("Age 14", nrow(exwas_C18_homair_28_age14))
 
 
@@ -622,7 +622,7 @@ exwas_HILIC_homair_28_age22$age <- rep("Age 22", nrow(exwas_HILIC_homair_28_age2
 
 exwas_C18_homair_28_age28 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/homair/homair_28/exwas_C18_homair_28_age28.csv")
 exwas_C18_homair_28_age28$Mode <- rep("C18",nrow(exwas_C18_homair_28_age28))
-exwas_C18_homair_28_age28 <- exwas_C18_homair_28_age28[exwas_C18_homair_28_age28$p.value < 0.001508217,]
+exwas_C18_homair_28_age28 <- exwas_C18_homair_28_age28[exwas_C18_homair_28_age28$p.value < 0.001508293,]
 exwas_C18_homair_28_age28$age <- rep("Age 28", nrow(exwas_C18_homair_28_age28))
 
 
@@ -736,7 +736,7 @@ exwas_homair_28 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital
 exwas_homair_28 <- exwas_homair_28[exwas_homair_28$age!= "Age 28",]
   
 exwas_homair_28$log10.p.value <- -log(exwas_homair_28$p.value,10)
-exwas_homair_28$age <- factor(exwas_homair_28$age, levels = c('Age 14', 'Age 22'))
+exwas_homair_28$age <- factor(exwas_homair_28$age, levels = c('Age 7', 'Age 14', 'Age 22'))
 
 exwas_homair_28$Metabolite <- rep(NA_character_,nrow(exwas_homair_28))
 
@@ -776,12 +776,13 @@ vol <-  (vol + theme(plot.title=element_text(size=16,face="bold"),
                      legend.background = element_rect(fill="white", 
                                                       linewidth=0.5, linetype="solid",  colour ="darkblue"),
                      plot.margin=unit(c(0.5,0.5,1,1.5), "cm")) +
-               ylim(c(-1,1)) +
-               annotate("rect", xmin = c(0.75, 1.75), 
-                    xmax = c(1.25, 2.25), 
-                    ymin = c(-1, -1), 
-                    ymax =rep(1,2),
+           ylim(c(-0.3,0.3)) +
+           annotate("rect", xmin = c(0.75, 1.75, 2.75), 
+                    xmax = c(1.25, 2.25, 3.25), 
+                    ymin = c(-0.3, -0.3, -0.3), 
+                    ymax = c(0.3, 0.3, 0.3),
                     alpha = 0.05))
+
 
 
 jpeg("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/homair/homair_28/plot_allsig_metabolites_homair_28.jpeg",
@@ -839,14 +840,12 @@ pfas_pathway_subset <- pathways_homair_28[pathways_homair_28$FET < 0.05,]
 all_pathways <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/all_pathways.csv")
 pfas_pathway_subset <- merge(pfas_pathway_subset, all_pathways, by.x = "Pathways")
 
-pfas_pathway_subset$Group <- factor(pfas_pathway_subset$Group, levels = c("Carbohydrate metabolism",
-                                                                          "Lipid metabolism",
+pfas_pathway_subset$Group <- factor(pfas_pathway_subset$Group, levels = c("Lipid metabolism",
                                                                           "Metabolism of amino acids and derivatives", 
                                                                           "Nucleotide metabolism"
                                                                           ))
 
-groups <- c("Carbohydrate metabolism",
-            "Lipid metabolism",
+groups <- c("Lipid metabolism",
             "Metabolism of amino acids and derivatives", 
             "Nucleotide metabolism")
             
@@ -857,8 +856,7 @@ pfas_pathway_subset$Pathways <- factor(pfas_pathway_subset$Pathways, levels = un
 
 ret <- c(length(unique(pfas_pathway_subset$Pathways[pfas_pathway_subset$Group ==  unique(pfas_pathway_subset$Group)[1]])),
          length(unique(pfas_pathway_subset$Pathways[pfas_pathway_subset$Group ==  unique(pfas_pathway_subset$Group)[2]])),
-         length(unique(pfas_pathway_subset$Pathways[pfas_pathway_subset$Group ==  unique(pfas_pathway_subset$Group)[3]])),
-         length(unique(pfas_pathway_subset$Pathways[pfas_pathway_subset$Group ==  unique(pfas_pathway_subset$Group)[4]])))
+         length(unique(pfas_pathway_subset$Pathways[pfas_pathway_subset$Group ==  unique(pfas_pathway_subset$Group)[3]])))
 
 gp <- (ggplot(pfas_pathway_subset, aes(x = age,  y = Pathways)) + 
          geom_point(aes(size = -log(FET , base = 10), shape = Mode), 
@@ -887,9 +885,8 @@ gp <- (ggplot(pfas_pathway_subset, aes(x = age,  y = Pathways)) +
 gp <- (gp +  geom_hline(yintercept = c(cumsum(ret))+0.5)
        + geom_hline(yintercept = 6, size = 2)
        + annotate("text", x = rep(4.9, length(unique(pfas_pathway_subset$Group))), 
-                  y = c(0.8, 2, 3.5, 5), 
-                  label = c("Carbohydrate metabolism",
-                            "Lipid metabolism",
+                  y = c(0.8, 3, 5), 
+                  label = c("Lipid metabolism",
                             "Metabolism of amino acids\nand derivatives", 
                             "Nucleotide metabolism"), color = "red",
                   size = rep(5, length(groups)), fontface  = 'bold')

@@ -97,36 +97,33 @@ merged_omics_C18 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospita
 ###################################################################################################################
 ###################################################################################################################
 ###################################################################################################################
-merged_omics_HILIC$bmi_28_bi<- ifelse(merged_omics_HILIC$bmi_28 < 25, 0, 1)
-merged_omics_C18$bmi_28_bi<- ifelse(merged_omics_C18$bmi_28 < 25, 0, 1)
-# bmi_28 and met at age 7
 
 ## HILIC
 
 merged_omics_HILIC_age7 <- merged_omics_HILIC[merged_omics_HILIC$Year == "7",]
 qqt <- as.data.frame(apply(merged_omics_HILIC_age7[,colnames(merged_omics_HILIC_age7) %in% paste0("Met",seq(1:nrow(data_HILIC)))], 2, function(x) new_quantile(x, cuts = 10)))
-data.bmi_28_bi.met_age7 = cbind(qqt[,c(paste0("Met",seq(1:nrow(data_HILIC))))], merged_omics_HILIC_age7[,c('sex', 'mage',  'mbmi', 'age7', "bmi_28_bi")])
-data.bmi_28_bi.met_age7$beta <- rep(NA_real_, nrow(data.bmi_28_bi.met_age7))
-data.bmi_28_bi.met_age7$model_pval <- rep(NA_real_, nrow(data.bmi_28_bi.met_age7))
+data.igi_28.met_age7 = cbind(qqt[,c(paste0("Met",seq(1:nrow(data_HILIC))))], merged_omics_HILIC_age7[,c('sex', 'mage',  'mbmi', 'age7', "igi_28")])
+data.igi_28.met_age7$beta <- rep(NA_real_, nrow(data.igi_28.met_age7))
+data.igi_28.met_age7$model_pval <- rep(NA_real_, nrow(data.igi_28.met_age7))
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 
 ## fit model between clinical outcomes and metabolites
 for(i in 1:1991){
-  s_lm <- (glm(bmi_28_bi ~ data.bmi_28_bi.met_age7[,i] + sex + age7 , family = binomial() ,data = data.bmi_28_bi.met_age7))
+  s_lm <- (lm(igi_28 ~ data.igi_28.met_age7[,i] + sex + age7 , data = data.igi_28.met_age7))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
   std.err <- sqrt(diag(cov.m1))
   
   r.est <- cbind(
-    Estimate = exp(coef(s_lm))
+    Estimate = coef(s_lm)
     , "Robust SE" = std.err
     , z = (coef(s_lm)/std.err)
     , "Pr(>|z|) "= 2 * pnorm(abs(coef(s_lm)/std.err), lower.tail = FALSE))
   
   
-  d_lm_status <- rbind(d_lm_status,c(colnames(data.bmi_28_bi.met_age7)[i], as.numeric(r.est[2,c(1,2,3,4)])))
+  d_lm_status <- rbind(d_lm_status,c(colnames(data.igi_28.met_age7)[i], as.numeric(r.est[2,c(1,2,3,4)])))
 }
 
 
@@ -134,30 +131,30 @@ for(i in 1:1991){
 d_lm_status <- d_lm_status[-1,]
 d_lm_status$z.value <- as.numeric(d_lm_status$z.value)
 d_lm_status$p.value <- as.numeric(d_lm_status$p.value)
-data.bmi_28_bi.met_age7 <- cbind(d_lm_status, data_HILIC[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Class")])
+data.igi_28.met_age7 <- cbind(d_lm_status, data_HILIC[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Class")])
 
-mumm_bmi_28_bi.met_age7 <- data.bmi_28_bi.met_age7[,c("mz","p.value","z.value","time")]
-colnames(mumm_bmi_28_bi.met_age7) <- c("m.z", "p.value", "t.score", "rt")
-mumm_bmi_28_bi.met_age7 <- mumm_bmi_28_bi.met_age7[order(mumm_bmi_28_bi.met_age7$p.value),]
-write.table(mumm_bmi_28_bi.met_age7, sep = "\t",
-            "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/mummichog_HILIC_bmi_28_bi_age7.txt",
+mumm_igi_28.met_age7 <- data.igi_28.met_age7[,c("mz","p.value","z.value","time")]
+colnames(mumm_igi_28.met_age7) <- c("m.z", "p.value", "t.score", "rt")
+mumm_igi_28.met_age7 <- mumm_igi_28.met_age7[order(mumm_igi_28.met_age7$p.value),]
+write.table(mumm_igi_28.met_age7, sep = "\t",
+            "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/mummichog_HILIC_igi_28_age7.txt",
             row.names = F, col.names = T)
 
 
-write.csv(data.bmi_28_bi.met_age7,
-          "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_HILIC_bmi_28_bi_age7.csv",
+write.csv(data.igi_28.met_age7,
+          "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_HILIC_igi_28_age7.csv",
           row.names = F)
 
 ### calculate p.value based on number of effect test
-exwas_HILIC_bmi_28_bi_age7 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_HILIC_bmi_28_bi_age7.csv")
-exwas_HILIC_bmi_28_bi_age7$Mode <- rep("HILIC",nrow(exwas_HILIC_bmi_28_bi_age7))
+exwas_HILIC_igi_28_age7 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_HILIC_igi_28_age7.csv")
+exwas_HILIC_igi_28_age7$Mode <- rep("HILIC",nrow(exwas_HILIC_igi_28_age7))
 
 ght <- cor(cbind(merged_omics_HILIC_age7[,paste0("Met",seq(1:nrow(data_HILIC)))]))
 et <- eigen(ght)
 1/ (sum((et$values>1 + 0)* (et$values - 1)))
 # 0.0005356186
 
-exwas_HILIC_bmi_28_bi_age7$Met_id[exwas_HILIC_bmi_28_bi_age7$p.value < 0.0005356186]
+exwas_HILIC_igi_28_age7$Met_id[exwas_HILIC_igi_28_age7$p.value < 0.0005356186]
 # character(0)
 
 
@@ -167,116 +164,116 @@ exwas_HILIC_bmi_28_bi_age7$Met_id[exwas_HILIC_bmi_28_bi_age7$p.value < 0.0005356
 
 merged_omics_C18_age7 <- merged_omics_C18[merged_omics_C18$Year == "7",]
 qqt <- as.data.frame(apply(merged_omics_C18_age7[,colnames(merged_omics_C18_age7) %in% paste0("Met",seq(1:nrow(data_C18)))], 2, function(x) new_quantile(x, cuts = 10)))
-data.bmi_28_bi.met_age7 = cbind(qqt[,c(paste0("Met",seq(1:nrow(data_C18))))], merged_omics_C18_age7[,c('sex', 'mage',  'mbmi', 'age7', "bmi_28_bi")])
-data.bmi_28_bi.met_age7$beta <- rep(NA_real_, nrow(data.bmi_28_bi.met_age7))
-data.bmi_28_bi.met_age7$model_pval <- rep(NA_real_, nrow(data.bmi_28_bi.met_age7))
+data.igi_28.met_age7 = cbind(qqt[,c(paste0("Met",seq(1:nrow(data_C18))))], merged_omics_C18_age7[,c('sex', 'mage',  'mbmi', 'age7', "igi_28")])
+data.igi_28.met_age7$beta <- rep(NA_real_, nrow(data.igi_28.met_age7))
+data.igi_28.met_age7$model_pval <- rep(NA_real_, nrow(data.igi_28.met_age7))
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:787){
-  s_lm <- (glm(bmi_28_bi ~ data.bmi_28_bi.met_age7[,i] + sex + age7 , family = binomial(), data = data.bmi_28_bi.met_age7))
+  s_lm <- (lm(igi_28 ~ data.igi_28.met_age7[,i] + sex + age7 , data = data.igi_28.met_age7))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
   std.err <- sqrt(diag(cov.m1))
   
   r.est <- cbind(
-    Estimate = exp(coef(s_lm))
+    Estimate = coef(s_lm)
     , "Robust SE" = std.err
     , z = (coef(s_lm)/std.err)
     , "Pr(>|z|) "= 2 * pnorm(abs(coef(s_lm)/std.err), lower.tail = FALSE))
   
   
-  d_lm_status <- rbind(d_lm_status,c(colnames(data.bmi_28_bi.met_age7)[i], as.numeric(r.est[2,c(1,2,3,4)])))
+  d_lm_status <- rbind(d_lm_status,c(colnames(data.igi_28.met_age7)[i], as.numeric(r.est[2,c(1,2,3,4)])))
 }
 
 d_lm_status <- d_lm_status[-1,]
 d_lm_status$z.value <- as.numeric(d_lm_status$z.value)
 d_lm_status$p.value <- as.numeric(d_lm_status$p.value)
-data.bmi_28_bi.met_age7 <- cbind(d_lm_status, data_C18[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Class")])
+data.igi_28.met_age7 <- cbind(d_lm_status, data_C18[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Class")])
 
-mumm_bmi_28_bi.met_age7 <- data.bmi_28_bi.met_age7[,c("mz","p.value","z.value","time")]
-colnames(mumm_bmi_28_bi.met_age7) <- c("m.z", "p.value", "t.score", "rt")
-mumm_bmi_28_bi.met_age7 <- mumm_bmi_28_bi.met_age7[order(mumm_bmi_28_bi.met_age7$p.value),]
-write.table(mumm_bmi_28_bi.met_age7, sep = "\t",
-            "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/mummichog_C18_bmi_28_bi_age7.txt",
+mumm_igi_28.met_age7 <- data.igi_28.met_age7[,c("mz","p.value","z.value","time")]
+colnames(mumm_igi_28.met_age7) <- c("m.z", "p.value", "t.score", "rt")
+mumm_igi_28.met_age7 <- mumm_igi_28.met_age7[order(mumm_igi_28.met_age7$p.value),]
+write.table(mumm_igi_28.met_age7, sep = "\t",
+            "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/mummichog_C18_igi_28_age7.txt",
             row.names = F, col.names = T)
 
 
-write.csv(data.bmi_28_bi.met_age7,
-          "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_C18_bmi_28_bi_age7.csv",
+write.csv(data.igi_28.met_age7,
+          "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_C18_igi_28_age7.csv",
           row.names = F)
 
-exwas_C18_bmi_28_bi_age7 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_C18_bmi_28_bi_age7.csv")
-exwas_C18_bmi_28_bi_age7$Mode <- rep("C18",nrow(exwas_C18_bmi_28_bi_age7))
+exwas_C18_igi_28_age7 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_C18_igi_28_age7.csv")
+exwas_C18_igi_28_age7$Mode <- rep("C18",nrow(exwas_C18_igi_28_age7))
 
 ght <- cor(cbind(merged_omics_C18_age7[,paste0("Met",seq(1:nrow(data_C18)))]))
 et <- eigen(ght)
 1/ (sum((et$values>1 + 0)* (et$values - 1)))
 # 0.001507876
 
-exwas_C18_bmi_28_bi_age7$Met_id[exwas_C18_bmi_28_bi_age7$p.value < 0.001507876]
-# [1] "Met513" 
+exwas_C18_igi_28_age7$Met_id[exwas_C18_igi_28_age7$p.value < 0.001507876]
+# character(0)
 
 
 ###################################################################################################################
 ###################################################################################################################
 ###################################################################################################################
 
-# bmi_28_bi and met at age 14
+# igi_28 and met at age 14
 
 ## HILIC
 
 merged_omics_HILIC_age14 <- merged_omics_HILIC[merged_omics_HILIC$Year == "14",]
 qqt <- as.data.frame(apply(merged_omics_HILIC_age14[,colnames(merged_omics_HILIC_age14) %in% paste0("Met",seq(1:nrow(data_HILIC)))], 2, function(x) new_quantile(x, cuts = 10)))
-data.bmi_28_bi.met_age14 = cbind(qqt[,c(paste0("Met",seq(1:nrow(data_HILIC))))], merged_omics_HILIC_age14[,c('sex', 'mage',  'mbmi', 'age14', "bmi_28_bi")])
-data.bmi_28_bi.met_age14$beta <- rep(NA_real_, nrow(data.bmi_28_bi.met_age14))
-data.bmi_28_bi.met_age14$model_pval <- rep(NA_real_, nrow(data.bmi_28_bi.met_age14))
+data.igi_28.met_age14 = cbind(qqt[,c(paste0("Met",seq(1:nrow(data_HILIC))))], merged_omics_HILIC_age14[,c('sex', 'mage',  'mbmi', 'age14', "igi_28")])
+data.igi_28.met_age14$beta <- rep(NA_real_, nrow(data.igi_28.met_age14))
+data.igi_28.met_age14$model_pval <- rep(NA_real_, nrow(data.igi_28.met_age14))
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:1991){
-  s_lm <- (glm(bmi_28_bi ~ data.bmi_28_bi.met_age14[,i] + sex + age14 ,  family = binomial(), data = data.bmi_28_bi.met_age14))
+  s_lm <- (lm(igi_28 ~ data.igi_28.met_age14[,i] + sex + age14 , data = data.igi_28.met_age14))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
   std.err <- sqrt(diag(cov.m1))
   
   r.est <- cbind(
-    Estimate = exp(coef(s_lm))
+    Estimate = coef(s_lm)
     , "Robust SE" = std.err
     , z = (coef(s_lm)/std.err)
     , "Pr(>|z|) "= 2 * pnorm(abs(coef(s_lm)/std.err), lower.tail = FALSE))
   
   
-  d_lm_status <- rbind(d_lm_status,c(colnames(data.bmi_28_bi.met_age14)[i], as.numeric(r.est[2,c(1,2,3,4)])))
+  d_lm_status <- rbind(d_lm_status,c(colnames(data.igi_28.met_age14)[i], as.numeric(r.est[2,c(1,2,3,4)])))
 }
 
 d_lm_status <- d_lm_status[-1,]
 d_lm_status$z.value <- as.numeric(d_lm_status$z.value)
 d_lm_status$p.value <- as.numeric(d_lm_status$p.value)
-data.bmi_28_bi.met_age14 <- cbind(d_lm_status, data_HILIC[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Class")])
+data.igi_28.met_age14 <- cbind(d_lm_status, data_HILIC[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Class")])
 
-mumm_bmi_28_bi.met_age14 <- data.bmi_28_bi.met_age14[,c("mz","p.value","z.value","time")]
-colnames(mumm_bmi_28_bi.met_age14) <- c("m.z", "p.value", "t.score", "rt")
-mumm_bmi_28_bi.met_age14 <- mumm_bmi_28_bi.met_age14[order(mumm_bmi_28_bi.met_age14$p.value),]
-write.table(mumm_bmi_28_bi.met_age14, sep = "\t",
-            "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/mummichog_HILIC_bmi_28_bi_age14.txt",
+mumm_igi_28.met_age14 <- data.igi_28.met_age14[,c("mz","p.value","z.value","time")]
+colnames(mumm_igi_28.met_age14) <- c("m.z", "p.value", "t.score", "rt")
+mumm_igi_28.met_age14 <- mumm_igi_28.met_age14[order(mumm_igi_28.met_age14$p.value),]
+write.table(mumm_igi_28.met_age14, sep = "\t",
+            "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/mummichog_HILIC_igi_28_age14.txt",
             row.names = F, col.names = T)
 
 
-write.csv(data.bmi_28_bi.met_age14,
-          "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_HILIC_bmi_28_bi_age14.csv",
+write.csv(data.igi_28.met_age14,
+          "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_HILIC_igi_28_age14.csv",
           row.names = F)
 
-exwas_HILIC_bmi_28_bi_age14 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_HILIC_bmi_28_bi_age14.csv")
-exwas_HILIC_bmi_28_bi_age14$Mode <- rep("HILIC",nrow(exwas_HILIC_bmi_28_bi_age14))
+exwas_HILIC_igi_28_age14 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_HILIC_igi_28_age14.csv")
+exwas_HILIC_igi_28_age14$Mode <- rep("HILIC",nrow(exwas_HILIC_igi_28_age14))
 
 ght <- cor(cbind(merged_omics_HILIC_age14[,paste0("Met",seq(1:nrow(data_HILIC)))]))
 et <- eigen(ght)
 1/ (sum((et$values>1 + 0)* (et$values - 1)))
 # 0.0005356186
 
-exwas_HILIC_bmi_28_bi_age14$Met_id[exwas_HILIC_bmi_28_bi_age14$p.value < 0.0005356186]
-# "Met532" 
+exwas_HILIC_igi_28_age14$Met_id[exwas_HILIC_igi_28_age14$p.value < 0.0005356186]
+# character(0)
 
 
 ###################################################################################################################
@@ -285,116 +282,116 @@ exwas_HILIC_bmi_28_bi_age14$Met_id[exwas_HILIC_bmi_28_bi_age14$p.value < 0.00053
 
 merged_omics_C18_age14 <- merged_omics_C18[merged_omics_C18$Year == "14",]
 qqt <- as.data.frame(apply(merged_omics_C18_age14[,colnames(merged_omics_C18_age14) %in% paste0("Met",seq(1:nrow(data_C18)))], 2, function(x) new_quantile(x, cuts = 10)))
-data.bmi_28_bi.met_age14 = cbind(qqt[,c(paste0("Met",seq(1:nrow(data_C18))))], merged_omics_C18_age14[,c('sex', 'mage',  'mbmi', 'age14', "bmi_28_bi")])
-data.bmi_28_bi.met_age14$beta <- rep(NA_real_, nrow(data.bmi_28_bi.met_age14))
-data.bmi_28_bi.met_age14$model_pval <- rep(NA_real_, nrow(data.bmi_28_bi.met_age14))
+data.igi_28.met_age14 = cbind(qqt[,c(paste0("Met",seq(1:nrow(data_C18))))], merged_omics_C18_age14[,c('sex', 'mage',  'mbmi', 'age14', "igi_28")])
+data.igi_28.met_age14$beta <- rep(NA_real_, nrow(data.igi_28.met_age14))
+data.igi_28.met_age14$model_pval <- rep(NA_real_, nrow(data.igi_28.met_age14))
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:787){
-  s_lm <- (glm(bmi_28_bi ~ data.bmi_28_bi.met_age14[,i] + sex + age14 , family = binomial(), data = data.bmi_28_bi.met_age14))
+  s_lm <- (lm(igi_28 ~ data.igi_28.met_age14[,i] + sex + age14 , data = data.igi_28.met_age14))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
   std.err <- sqrt(diag(cov.m1))
   
   r.est <- cbind(
-    Estimate = exp(coef(s_lm))
+    Estimate = coef(s_lm)
     , "Robust SE" = std.err
     , z = (coef(s_lm)/std.err)
     , "Pr(>|z|) "= 2 * pnorm(abs(coef(s_lm)/std.err), lower.tail = FALSE))
   
   
-  d_lm_status <- rbind(d_lm_status,c(colnames(data.bmi_28_bi.met_age14)[i], as.numeric(r.est[2,c(1,2,3,4)])))
+  d_lm_status <- rbind(d_lm_status,c(colnames(data.igi_28.met_age14)[i], as.numeric(r.est[2,c(1,2,3,4)])))
 }
 
 d_lm_status <- d_lm_status[-1,]
 d_lm_status$z.value <- as.numeric(d_lm_status$z.value)
 d_lm_status$p.value <- as.numeric(d_lm_status$p.value)
-data.bmi_28_bi.met_age14 <- cbind(d_lm_status, data_C18[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Class")])
+data.igi_28.met_age14 <- cbind(d_lm_status, data_C18[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Class")])
 
-mumm_bmi_28_bi.met_age14 <- data.bmi_28_bi.met_age14[,c("mz","p.value","z.value","time")]
-colnames(mumm_bmi_28_bi.met_age14) <- c("m.z", "p.value", "t.score", "rt")
-mumm_bmi_28_bi.met_age14 <- mumm_bmi_28_bi.met_age14[order(mumm_bmi_28_bi.met_age14$p.value),]
-write.table(mumm_bmi_28_bi.met_age14, sep = "\t",
-            "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/mummichog_C18_bmi_28_bi_age14.txt",
+mumm_igi_28.met_age14 <- data.igi_28.met_age14[,c("mz","p.value","z.value","time")]
+colnames(mumm_igi_28.met_age14) <- c("m.z", "p.value", "t.score", "rt")
+mumm_igi_28.met_age14 <- mumm_igi_28.met_age14[order(mumm_igi_28.met_age14$p.value),]
+write.table(mumm_igi_28.met_age14, sep = "\t",
+            "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/mummichog_C18_igi_28_age14.txt",
             row.names = F, col.names = T)
 
 
-write.csv(data.bmi_28_bi.met_age14,
-          "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_C18_bmi_28_bi_age14.csv",
+write.csv(data.igi_28.met_age14,
+          "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_C18_igi_28_age14.csv",
           row.names = F)
 
-exwas_C18_bmi_28_bi_age14 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_C18_bmi_28_bi_age14.csv")
-exwas_C18_bmi_28_bi_age14$Mode <- rep("C18",nrow(exwas_C18_bmi_28_bi_age14))
+exwas_C18_igi_28_age14 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_C18_igi_28_age14.csv")
+exwas_C18_igi_28_age14$Mode <- rep("C18",nrow(exwas_C18_igi_28_age14))
 
 ght <- cor(cbind(merged_omics_C18_age14[,paste0("Met",seq(1:nrow(data_C18)))]))
 et <- eigen(ght)
 1/ (sum((et$values>1 + 0)* (et$values - 1)))
 # 0.001507908
 
-exwas_C18_bmi_28_bi_age14$Met_id[exwas_C18_bmi_28_bi_age14$p.value < 0.001507908]
-#   "Met554" "Met591"
+exwas_C18_igi_28_age14$Met_id[exwas_C18_igi_28_age14$p.value < 0.001507908]
+#  character(0)
 
 
 ###################################################################################################################
 ###################################################################################################################
 ###################################################################################################################
 
-# bmi_28_bi and met at age 22
+# igi_28 and met at age 22
 
 ## HILIC
 
 merged_omics_HILIC_age22 <- merged_omics_HILIC[merged_omics_HILIC$Year == "22",]
 qqt <- as.data.frame(apply(merged_omics_HILIC_age22[,colnames(merged_omics_HILIC_age22) %in% paste0("Met",seq(1:nrow(data_HILIC)))], 2, function(x) new_quantile(x, cuts = 10)))
-data.bmi_28_bi.met_age22 = cbind(qqt[,c(paste0("Met",seq(1:nrow(data_HILIC))))], merged_omics_HILIC_age22[,c('sex', 'mage',  'mbmi', 'age22', "bmi_28_bi")])
-data.bmi_28_bi.met_age22$beta <- rep(NA_real_, nrow(data.bmi_28_bi.met_age22))
-data.bmi_28_bi.met_age22$model_pval <- rep(NA_real_, nrow(data.bmi_28_bi.met_age22))
+data.igi_28.met_age22 = cbind(qqt[,c(paste0("Met",seq(1:nrow(data_HILIC))))], merged_omics_HILIC_age22[,c('sex', 'mage',  'mbmi', 'age22', "igi_28")])
+data.igi_28.met_age22$beta <- rep(NA_real_, nrow(data.igi_28.met_age22))
+data.igi_28.met_age22$model_pval <- rep(NA_real_, nrow(data.igi_28.met_age22))
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:1991){
-  s_lm <- (glm(bmi_28_bi ~ data.bmi_28_bi.met_age22[,i] + sex + age22 , family = binomial(), data = data.bmi_28_bi.met_age22))
+  s_lm <- (lm(igi_28 ~ data.igi_28.met_age22[,i] + sex + age22 , data = data.igi_28.met_age22))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
   std.err <- sqrt(diag(cov.m1))
   
   r.est <- cbind(
-    Estimate = exp(coef(s_lm))
+    Estimate = coef(s_lm)
     , "Robust SE" = std.err
     , z = (coef(s_lm)/std.err)
     , "Pr(>|z|) "= 2 * pnorm(abs(coef(s_lm)/std.err), lower.tail = FALSE))
   
   
-  d_lm_status <- rbind(d_lm_status,c(colnames(data.bmi_28_bi.met_age22)[i], as.numeric(r.est[2,c(1,2,3,4)])))
+  d_lm_status <- rbind(d_lm_status,c(colnames(data.igi_28.met_age22)[i], as.numeric(r.est[2,c(1,2,3,4)])))
 }
 
 d_lm_status <- d_lm_status[-1,]
 d_lm_status$z.value <- as.numeric(d_lm_status$z.value)
 d_lm_status$p.value <- as.numeric(d_lm_status$p.value)
-data.bmi_28_bi.met_age22 <- cbind(d_lm_status, data_HILIC[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Class")])
+data.igi_28.met_age22 <- cbind(d_lm_status, data_HILIC[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Class")])
 
-mumm_bmi_28_bi.met_age22 <- data.bmi_28_bi.met_age22[,c("mz","p.value","z.value","time")]
-colnames(mumm_bmi_28_bi.met_age22) <- c("m.z", "p.value", "t.score", "rt")
-mumm_bmi_28_bi.met_age22 <- mumm_bmi_28_bi.met_age22[order(mumm_bmi_28_bi.met_age22$p.value),]
-write.table(mumm_bmi_28_bi.met_age22, sep = "\t",
-            "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/mummichog_HILIC_bmi_28_bi_age22.txt",
+mumm_igi_28.met_age22 <- data.igi_28.met_age22[,c("mz","p.value","z.value","time")]
+colnames(mumm_igi_28.met_age22) <- c("m.z", "p.value", "t.score", "rt")
+mumm_igi_28.met_age22 <- mumm_igi_28.met_age22[order(mumm_igi_28.met_age22$p.value),]
+write.table(mumm_igi_28.met_age22, sep = "\t",
+            "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/mummichog_HILIC_igi_28_age22.txt",
             row.names = F, col.names = T)
 
 
-write.csv(data.bmi_28_bi.met_age22,
-          "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_HILIC_bmi_28_bi_age22.csv",
+write.csv(data.igi_28.met_age22,
+          "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_HILIC_igi_28_age22.csv",
           row.names = F)
 
-exwas_HILIC_bmi_28_bi_age22 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_HILIC_bmi_28_bi_age22.csv")
-exwas_HILIC_bmi_28_bi_age22$Mode <- rep("HILIC",nrow(exwas_HILIC_bmi_28_bi_age22))
+exwas_HILIC_igi_28_age22 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_HILIC_igi_28_age22.csv")
+exwas_HILIC_igi_28_age22$Mode <- rep("HILIC",nrow(exwas_HILIC_igi_28_age22))
 
 ght <- cor(cbind(merged_omics_HILIC_age22[,paste0("Met",seq(1:nrow(data_HILIC)))]))
 et <- eigen(ght)
 1/ (sum((et$values>1 + 0)* (et$values - 1)))
 # 0.0005356186
 
-exwas_HILIC_bmi_28_bi_age22$Met_id[exwas_HILIC_bmi_28_bi_age22$p.value < 0.0005356186]
-# "Met637" "Met716"
+exwas_HILIC_igi_28_age22$Met_id[exwas_HILIC_igi_28_age22$p.value < 0.0005356186]
+# character(0)
 
 
 ###################################################################################################################
@@ -403,115 +400,114 @@ exwas_HILIC_bmi_28_bi_age22$Met_id[exwas_HILIC_bmi_28_bi_age22$p.value < 0.00053
 
 merged_omics_C18_age22 <- merged_omics_C18[merged_omics_C18$Year == "22",]
 qqt <- as.data.frame(apply(merged_omics_C18_age22[,colnames(merged_omics_C18_age22) %in% paste0("Met",seq(1:nrow(data_C18)))], 2, function(x) new_quantile(x, cuts = 10)))
-data.bmi_28_bi.met_age22 = cbind(qqt[,c(paste0("Met",seq(1:nrow(data_C18))))], merged_omics_C18_age22[,c('sex', 'mage',  'mbmi', 'age22', "bmi_28_bi")])
-data.bmi_28_bi.met_age22$beta <- rep(NA_real_, nrow(data.bmi_28_bi.met_age22))
-data.bmi_28_bi.met_age22$model_pval <- rep(NA_real_, nrow(data.bmi_28_bi.met_age22))
+data.igi_28.met_age22 = cbind(qqt[,c(paste0("Met",seq(1:nrow(data_C18))))], merged_omics_C18_age22[,c('sex', 'mage',  'mbmi', 'age22', "igi_28")])
+data.igi_28.met_age22$beta <- rep(NA_real_, nrow(data.igi_28.met_age22))
+data.igi_28.met_age22$model_pval <- rep(NA_real_, nrow(data.igi_28.met_age22))
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:787){
-  s_lm <- (glm(bmi_28_bi ~ data.bmi_28_bi.met_age22[,i] + sex + age22 ,  family = binomial(), data = data.bmi_28_bi.met_age22))
+  s_lm <- (lm(igi_28 ~ data.igi_28.met_age22[,i] + sex + age22 , data = data.igi_28.met_age22))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
   std.err <- sqrt(diag(cov.m1))
   
   r.est <- cbind(
-    Estimate = exp(coef(s_lm))
+    Estimate = coef(s_lm)
     , "Robust SE" = std.err
     , z = (coef(s_lm)/std.err)
     , "Pr(>|z|) "= 2 * pnorm(abs(coef(s_lm)/std.err), lower.tail = FALSE))
   
   
-  d_lm_status <- rbind(d_lm_status,c(colnames(data.bmi_28_bi.met_age22)[i], as.numeric(r.est[2,c(1,2,3,4)])))
+  d_lm_status <- rbind(d_lm_status,c(colnames(data.igi_28.met_age22)[i], as.numeric(r.est[2,c(1,2,3,4)])))
 }
 
 d_lm_status <- d_lm_status[-1,]
 d_lm_status$z.value <- as.numeric(d_lm_status$z.value)
 d_lm_status$p.value <- as.numeric(d_lm_status$p.value)
-data.bmi_28_bi.met_age22 <- cbind(d_lm_status, data_C18[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Class")])
+data.igi_28.met_age22 <- cbind(d_lm_status, data_C18[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Class")])
 
-mumm_bmi_28_bi.met_age22 <- data.bmi_28_bi.met_age22[,c("mz","p.value","z.value","time")]
-colnames(mumm_bmi_28_bi.met_age22) <- c("m.z", "p.value", "t.score", "rt")
-mumm_bmi_28_bi.met_age22 <- mumm_bmi_28_bi.met_age22[order(mumm_bmi_28_bi.met_age22$p.value),]
-write.table(mumm_bmi_28_bi.met_age22, sep = "\t",
-            "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/mummichog_C18_bmi_28_bi_age22.txt",
+mumm_igi_28.met_age22 <- data.igi_28.met_age22[,c("mz","p.value","z.value","time")]
+colnames(mumm_igi_28.met_age22) <- c("m.z", "p.value", "t.score", "rt")
+mumm_igi_28.met_age22 <- mumm_igi_28.met_age22[order(mumm_igi_28.met_age22$p.value),]
+write.table(mumm_igi_28.met_age22, sep = "\t",
+            "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/mummichog_C18_igi_28_age22.txt",
             row.names = F, col.names = T)
 
 
-write.csv(data.bmi_28_bi.met_age22,
-          "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_C18_bmi_28_bi_age22.csv",
+write.csv(data.igi_28.met_age22,
+          "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_C18_igi_28_age22.csv",
           row.names = F)
 
-exwas_C18_bmi_28_bi_age22 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_C18_bmi_28_bi_age22.csv")
-exwas_C18_bmi_28_bi_age22$Mode <- rep("C18",nrow(exwas_C18_bmi_28_bi_age22))
+exwas_C18_igi_28_age22 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_C18_igi_28_age22.csv")
+exwas_C18_igi_28_age22$Mode <- rep("C18",nrow(exwas_C18_igi_28_age22))
 
 ght <- cor(cbind(merged_omics_C18_age22[,paste0("Met",seq(1:nrow(data_C18)))]))
 et <- eigen(ght)
 1/ (sum((et$values>1 + 0)* (et$values - 1)))
 # 0.001508217
 
-exwas_C18_bmi_28_bi_age22$Met_id[exwas_C18_bmi_28_bi_age22$p.value < 0.001508217]
-#  "Met69"  "Met204" "Met414" "Met425" "Met438" "Met673"
-
+exwas_C18_igi_28_age22$Met_id[exwas_C18_igi_28_age22$p.value < 0.001508217]
+#  character(0)
 
 ###################################################################################################################
 ###################################################################################################################
 ###################################################################################################################
 
-# bmi_28_bi and met at age 28
+# igi_28 and met at age 28
 
 ## HILIC
 
 merged_omics_HILIC_age28 <- merged_omics_HILIC[merged_omics_HILIC$Year == "28",]
 qqt <- as.data.frame(apply(merged_omics_HILIC_age28[,colnames(merged_omics_HILIC_age28) %in% paste0("Met",seq(1:nrow(data_HILIC)))], 2, function(x) new_quantile(x, cuts = 10)))
-data.bmi_28_bi.met_age28 = cbind(qqt[,c(paste0("Met",seq(1:nrow(data_HILIC))))], merged_omics_HILIC_age28[,c('sex', 'mage',  'mbmi', 'age28', "bmi_28_bi")])
-data.bmi_28_bi.met_age28$beta <- rep(NA_real_, nrow(data.bmi_28_bi.met_age28))
-data.bmi_28_bi.met_age28$model_pval <- rep(NA_real_, nrow(data.bmi_28_bi.met_age28))
+data.igi_28.met_age28 = cbind(qqt[,c(paste0("Met",seq(1:nrow(data_HILIC))))], merged_omics_HILIC_age28[,c('sex', 'mage',  'mbmi', 'age28', "igi_28")])
+data.igi_28.met_age28$beta <- rep(NA_real_, nrow(data.igi_28.met_age28))
+data.igi_28.met_age28$model_pval <- rep(NA_real_, nrow(data.igi_28.met_age28))
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:1991){
-  s_lm <- (glm(bmi_28_bi ~ data.bmi_28_bi.met_age28[,i] + sex + age28 , family = binomial(), data = data.bmi_28_bi.met_age28))
+  s_lm <- (lm(igi_28 ~ data.igi_28.met_age28[,i] + sex + age28 , data = data.igi_28.met_age28))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
   std.err <- sqrt(diag(cov.m1))
   
   r.est <- cbind(
-    Estimate = exp(coef(s_lm))
+    Estimate = coef(s_lm)
     , "Robust SE" = std.err
     , z = (coef(s_lm)/std.err)
     , "Pr(>|z|) "= 2 * pnorm(abs(coef(s_lm)/std.err), lower.tail = FALSE))
   
   
-  d_lm_status <- rbind(d_lm_status,c(colnames(data.bmi_28_bi.met_age28)[i], as.numeric(r.est[2,c(1,2,3,4)])))
+  d_lm_status <- rbind(d_lm_status,c(colnames(data.igi_28.met_age28)[i], as.numeric(r.est[2,c(1,2,3,4)])))
 }
 
 d_lm_status <- d_lm_status[-1,]
 d_lm_status$z.value <- as.numeric(d_lm_status$z.value)
 d_lm_status$p.value <- as.numeric(d_lm_status$p.value)
-data.bmi_28_bi.met_age28 <- cbind(d_lm_status, data_HILIC[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Class")])
+data.igi_28.met_age28 <- cbind(d_lm_status, data_HILIC[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Class")])
 
-mumm_bmi_28_bi.met_age28 <- data.bmi_28_bi.met_age28[,c("mz","p.value","z.value","time")]
-colnames(mumm_bmi_28_bi.met_age28) <- c("m.z", "p.value", "t.score", "rt")
-mumm_bmi_28_bi.met_age28 <- mumm_bmi_28_bi.met_age28[order(mumm_bmi_28_bi.met_age28$p.value),]
-write.table(mumm_bmi_28_bi.met_age28, sep = "\t",
-            "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/mummichog_HILIC_bmi_28_bi_age28.txt",
+mumm_igi_28.met_age28 <- data.igi_28.met_age28[,c("mz","p.value","z.value","time")]
+colnames(mumm_igi_28.met_age28) <- c("m.z", "p.value", "t.score", "rt")
+mumm_igi_28.met_age28 <- mumm_igi_28.met_age28[order(mumm_igi_28.met_age28$p.value),]
+write.table(mumm_igi_28.met_age28, sep = "\t",
+            "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/mummichog_HILIC_igi_28_age28.txt",
             row.names = F, col.names = T)
 
 
-write.csv(data.bmi_28_bi.met_age28,
-          "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_HILIC_bmi_28_bi_age28.csv",
+write.csv(data.igi_28.met_age28,
+          "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_HILIC_igi_28_age28.csv",
           row.names = F)
 
-exwas_HILIC_bmi_28_bi_age28 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_HILIC_bmi_28_bi_age28.csv")
-exwas_HILIC_bmi_28_bi_age28$Mode <- rep("HILIC",nrow(exwas_HILIC_bmi_28_bi_age28))
+exwas_HILIC_igi_28_age28 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_HILIC_igi_28_age28.csv")
+exwas_HILIC_igi_28_age28$Mode <- rep("HILIC",nrow(exwas_HILIC_igi_28_age28))
 
 ght <- cor(cbind(merged_omics_HILIC_age28[,paste0("Met",seq(1:nrow(data_HILIC)))]))
 et <- eigen(ght)
 1/ (sum((et$values>1 + 0)* (et$values - 1)))
 # 0.0005356186
 
-exwas_HILIC_bmi_28_bi_age28$Met_id[exwas_HILIC_bmi_28_bi_age28$p.value < 0.0005356186]
+exwas_HILIC_igi_28_age28$Met_id[exwas_HILIC_igi_28_age28$p.value < 0.0005356186]
 # character(0)
 
 
@@ -521,55 +517,55 @@ exwas_HILIC_bmi_28_bi_age28$Met_id[exwas_HILIC_bmi_28_bi_age28$p.value < 0.00053
 
 merged_omics_C18_age28 <- merged_omics_C18[merged_omics_C18$Year == "28",]
 qqt <- as.data.frame(apply(merged_omics_C18_age28[,colnames(merged_omics_C18_age28) %in% paste0("Met",seq(1:nrow(data_C18)))], 2, function(x) new_quantile(x, cuts = 10)))
-data.bmi_28_bi.met_age28 = cbind(qqt[,c(paste0("Met",seq(1:nrow(data_C18))))], merged_omics_C18_age28[,c('sex', 'mage',  'mbmi', 'age28', "bmi_28_bi")])
-data.bmi_28_bi.met_age28$beta <- rep(NA_real_, nrow(data.bmi_28_bi.met_age28))
-data.bmi_28_bi.met_age28$model_pval <- rep(NA_real_, nrow(data.bmi_28_bi.met_age28))
+data.igi_28.met_age28 = cbind(qqt[,c(paste0("Met",seq(1:nrow(data_C18))))], merged_omics_C18_age28[,c('sex', 'mage',  'mbmi', 'age28', "igi_28")])
+data.igi_28.met_age28$beta <- rep(NA_real_, nrow(data.igi_28.met_age28))
+data.igi_28.met_age28$model_pval <- rep(NA_real_, nrow(data.igi_28.met_age28))
 d_lm_status <- data.frame(Met_id = NA_character_, Beta = NA_real_, Std.Error = NA_real_, z.value = NA_real_ , p.value = NA_real_)
 
 for(i in 1:787){
-  s_lm <- (glm(bmi_28_bi ~ data.bmi_28_bi.met_age28[,i] + sex + age28 , family = binomial(), data = data.bmi_28_bi.met_age28))
+  s_lm <- (lm(igi_28 ~ data.igi_28.met_age28[,i] + sex + age28 , data = data.igi_28.met_age28))
   
   cov.m1 <- vcovHC(s_lm, type = "HC3")
   
   std.err <- sqrt(diag(cov.m1))
   
   r.est <- cbind(
-    Estimate = exp(coef(s_lm))
+    Estimate = coef(s_lm)
     , "Robust SE" = std.err
     , z = (coef(s_lm)/std.err)
     , "Pr(>|z|) "= 2 * pnorm(abs(coef(s_lm)/std.err), lower.tail = FALSE))
   
   
-  d_lm_status <- rbind(d_lm_status,c(colnames(data.bmi_28_bi.met_age28)[i], as.numeric(r.est[2,c(1,2,3,4)])))
+  d_lm_status <- rbind(d_lm_status,c(colnames(data.igi_28.met_age28)[i], as.numeric(r.est[2,c(1,2,3,4)])))
 }
 
 d_lm_status <- d_lm_status[-1,]
 d_lm_status$z.value <- as.numeric(d_lm_status$z.value)
 d_lm_status$p.value <- as.numeric(d_lm_status$p.value)
-data.bmi_28_bi.met_age28 <- cbind(d_lm_status, data_C18[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Class")])
+data.igi_28.met_age28 <- cbind(d_lm_status, data_C18[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Class")])
 
-mumm_bmi_28_bi.met_age28 <- data.bmi_28_bi.met_age28[,c("mz","p.value","z.value","time")]
-colnames(mumm_bmi_28_bi.met_age28) <- c("m.z", "p.value", "t.score", "rt")
-mumm_bmi_28_bi.met_age28 <- mumm_bmi_28_bi.met_age28[order(mumm_bmi_28_bi.met_age28$p.value),]
-write.table(mumm_bmi_28_bi.met_age28, sep = "\t",
-            "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/mummichog_C18_bmi_28_bi_age28.txt",
+mumm_igi_28.met_age28 <- data.igi_28.met_age28[,c("mz","p.value","z.value","time")]
+colnames(mumm_igi_28.met_age28) <- c("m.z", "p.value", "t.score", "rt")
+mumm_igi_28.met_age28 <- mumm_igi_28.met_age28[order(mumm_igi_28.met_age28$p.value),]
+write.table(mumm_igi_28.met_age28, sep = "\t",
+            "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/mummichog_C18_igi_28_age28.txt",
             row.names = F, col.names = T)
 
 
-write.csv(data.bmi_28_bi.met_age28,
-          "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_C18_bmi_28_bi_age28.csv",
+write.csv(data.igi_28.met_age28,
+          "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_C18_igi_28_age28.csv",
           row.names = F)
 
-exwas_C18_bmi_28_bi_age28 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_C18_bmi_28_bi_age28.csv")
-exwas_C18_bmi_28_bi_age28$Mode <- rep("C18",nrow(exwas_C18_bmi_28_bi_age28))
+exwas_C18_igi_28_age28 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_C18_igi_28_age28.csv")
+exwas_C18_igi_28_age28$Mode <- rep("C18",nrow(exwas_C18_igi_28_age28))
 
 ght <- cor(cbind(merged_omics_C18_age28[,paste0("Met",seq(1:nrow(data_C18)))]))
 et <- eigen(ght)
 1/ (sum((et$values>1 + 0)* (et$values - 1)))
 # 0.001508217
 
-exwas_C18_bmi_28_bi_age28$Met_id[exwas_C18_bmi_28_bi_age28$p.value < 0.001508293]
-#  "Met69" "Met316" "Met324"
+exwas_C18_igi_28_age28$Met_id[exwas_C18_igi_28_age28$p.value < 0.001508293]
+# character(0)
 
 
 ################################################################################################################################################################
@@ -582,66 +578,66 @@ exwas_C18_bmi_28_bi_age28$Met_id[exwas_C18_bmi_28_bi_age28$p.value < 0.001508293
 # Plots
 ## At age7
 
-exwas_C18_bmi_28_bi_age7 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_C18_bmi_28_bi_age7.csv")
-exwas_C18_bmi_28_bi_age7$Mode <- rep("C18",nrow(exwas_C18_bmi_28_bi_age7))
-exwas_C18_bmi_28_bi_age7 <- exwas_C18_bmi_28_bi_age7[exwas_C18_bmi_28_bi_age7$p.value < 0.001507876,]
-exwas_C18_bmi_28_bi_age7$age <- rep("Age 7", nrow(exwas_C18_bmi_28_bi_age7))
+exwas_C18_igi_28_age7 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_C18_igi_28_age7.csv")
+exwas_C18_igi_28_age7$Mode <- rep("C18",nrow(exwas_C18_igi_28_age7))
+exwas_C18_igi_28_age7 <- exwas_C18_igi_28_age7[exwas_C18_igi_28_age7$p.value < 0.001507876,]
+exwas_C18_igi_28_age7$age <- rep("Age 7", nrow(exwas_C18_igi_28_age7))
 
-exwas_HILIC_bmi_28_bi_age7 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_HILIC_bmi_28_bi_age7.csv")
-exwas_HILIC_bmi_28_bi_age7$Mode <- rep("HILIC",nrow(exwas_HILIC_bmi_28_bi_age7))
-exwas_HILIC_bmi_28_bi_age7 <- exwas_HILIC_bmi_28_bi_age7[exwas_HILIC_bmi_28_bi_age7$p.value < 0.0005356186,]
-exwas_HILIC_bmi_28_bi_age7$age <- rep("Age 7", nrow(exwas_HILIC_bmi_28_bi_age7))
+exwas_HILIC_igi_28_age7 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_HILIC_igi_28_age7.csv")
+exwas_HILIC_igi_28_age7$Mode <- rep("HILIC",nrow(exwas_HILIC_igi_28_age7))
+exwas_HILIC_igi_28_age7 <- exwas_HILIC_igi_28_age7[exwas_HILIC_igi_28_age7$p.value < 0.0005356186,]
+exwas_HILIC_igi_28_age7$age <- rep("Age 7", nrow(exwas_HILIC_igi_28_age7))
 
 ## At age14
 
-exwas_C18_bmi_28_bi_age14 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_C18_bmi_28_bi_age14.csv")
-exwas_C18_bmi_28_bi_age14$Mode <- rep("C18",nrow(exwas_C18_bmi_28_bi_age14))
-exwas_C18_bmi_28_bi_age14 <- exwas_C18_bmi_28_bi_age14[exwas_C18_bmi_28_bi_age14$p.value < 0.001507908,]
-exwas_C18_bmi_28_bi_age14$age <- rep("Age 14", nrow(exwas_C18_bmi_28_bi_age14))
+exwas_C18_igi_28_age14 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_C18_igi_28_age14.csv")
+exwas_C18_igi_28_age14$Mode <- rep("C18",nrow(exwas_C18_igi_28_age14))
+exwas_C18_igi_28_age14 <- exwas_C18_igi_28_age14[exwas_C18_igi_28_age14$p.value < 0.001507908,]
+exwas_C18_igi_28_age14$age <- rep("Age 14", nrow(exwas_C18_igi_28_age14))
 
 
-exwas_HILIC_bmi_28_bi_age14 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_HILIC_bmi_28_bi_age14.csv")
-exwas_HILIC_bmi_28_bi_age14$Mode <- rep("HILIC",nrow(exwas_HILIC_bmi_28_bi_age14))
-exwas_HILIC_bmi_28_bi_age14 <- exwas_HILIC_bmi_28_bi_age14[exwas_HILIC_bmi_28_bi_age14$p.value < 0.0005356186,]
-exwas_HILIC_bmi_28_bi_age14$age <- rep("Age 14", nrow(exwas_HILIC_bmi_28_bi_age14))
+exwas_HILIC_igi_28_age14 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_HILIC_igi_28_age14.csv")
+exwas_HILIC_igi_28_age14$Mode <- rep("HILIC",nrow(exwas_HILIC_igi_28_age14))
+exwas_HILIC_igi_28_age14 <- exwas_HILIC_igi_28_age14[exwas_HILIC_igi_28_age14$p.value < 0.0005356186,]
+exwas_HILIC_igi_28_age14$age <- rep("Age 14", nrow(exwas_HILIC_igi_28_age14))
 
 ## At age22
 
-exwas_C18_bmi_28_bi_age22 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_C18_bmi_28_bi_age22.csv")
-exwas_C18_bmi_28_bi_age22$Mode <- rep("C18",nrow(exwas_C18_bmi_28_bi_age22))
-exwas_C18_bmi_28_bi_age22 <- exwas_C18_bmi_28_bi_age22[exwas_C18_bmi_28_bi_age22$p.value < 0.001508217,]
-exwas_C18_bmi_28_bi_age22$age <- rep("Age 22", nrow(exwas_C18_bmi_28_bi_age22))
+exwas_C18_igi_28_age22 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_C18_igi_28_age22.csv")
+exwas_C18_igi_28_age22$Mode <- rep("C18",nrow(exwas_C18_igi_28_age22))
+exwas_C18_igi_28_age22 <- exwas_C18_igi_28_age22[exwas_C18_igi_28_age22$p.value < 0.001508217,]
+exwas_C18_igi_28_age22$age <- rep("Age 22", nrow(exwas_C18_igi_28_age22))
 
 
-exwas_HILIC_bmi_28_bi_age22 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_HILIC_bmi_28_bi_age22.csv")
-exwas_HILIC_bmi_28_bi_age22$Mode <- rep("HILIC",nrow(exwas_HILIC_bmi_28_bi_age22))
-exwas_HILIC_bmi_28_bi_age22 <- exwas_HILIC_bmi_28_bi_age22[exwas_HILIC_bmi_28_bi_age22$p.value < 0.0005356186,]
-exwas_HILIC_bmi_28_bi_age22$age <- rep("Age 22", nrow(exwas_HILIC_bmi_28_bi_age22))
+exwas_HILIC_igi_28_age22 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_HILIC_igi_28_age22.csv")
+exwas_HILIC_igi_28_age22$Mode <- rep("HILIC",nrow(exwas_HILIC_igi_28_age22))
+exwas_HILIC_igi_28_age22 <- exwas_HILIC_igi_28_age22[exwas_HILIC_igi_28_age22$p.value < 0.0005356186,]
+exwas_HILIC_igi_28_age22$age <- rep("Age 22", nrow(exwas_HILIC_igi_28_age22))
 
 ## At age28
 
-exwas_C18_bmi_28_bi_age28 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_C18_bmi_28_bi_age28.csv")
-exwas_C18_bmi_28_bi_age28$Mode <- rep("C18",nrow(exwas_C18_bmi_28_bi_age28))
-exwas_C18_bmi_28_bi_age28 <- exwas_C18_bmi_28_bi_age28[exwas_C18_bmi_28_bi_age28$p.value < 0.001508293,]
-exwas_C18_bmi_28_bi_age28$age <- rep("Age 28", nrow(exwas_C18_bmi_28_bi_age28))
+exwas_C18_igi_28_age28 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_C18_igi_28_age28.csv")
+exwas_C18_igi_28_age28$Mode <- rep("C18",nrow(exwas_C18_igi_28_age28))
+exwas_C18_igi_28_age28 <- exwas_C18_igi_28_age28[exwas_C18_igi_28_age28$p.value < 0.001508293,]
+exwas_C18_igi_28_age28$age <- rep("Age 28", nrow(exwas_C18_igi_28_age28))
 
 
-exwas_HILIC_bmi_28_bi_age28 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_HILIC_bmi_28_bi_age28.csv")
-exwas_HILIC_bmi_28_bi_age28$Mode <- rep("HILIC",nrow(exwas_HILIC_bmi_28_bi_age28))
-exwas_HILIC_bmi_28_bi_age28 <- exwas_HILIC_bmi_28_bi_age28[exwas_HILIC_bmi_28_bi_age28$p.value < 0.0005356186,]
-exwas_HILIC_bmi_28_bi_age28$age <- rep("Age 28", nrow(exwas_HILIC_bmi_28_bi_age28))
+exwas_HILIC_igi_28_age28 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_HILIC_igi_28_age28.csv")
+exwas_HILIC_igi_28_age28$Mode <- rep("HILIC",nrow(exwas_HILIC_igi_28_age28))
+exwas_HILIC_igi_28_age28 <- exwas_HILIC_igi_28_age28[exwas_HILIC_igi_28_age28$p.value < 0.0005356186,]
+exwas_HILIC_igi_28_age28$age <- rep("Age 28", nrow(exwas_HILIC_igi_28_age28))
 
 
 ##########################################################################################
 ##########################################################################################
 ##########################################################################################
 
-# Naming the metabolites and Corresponding adducts
+# Naming the metabolites and Corresponding adducts (0)
 
-exwas_bmi_28_bi <- rbind(exwas_HILIC_bmi_28_bi_age7,exwas_C18_bmi_28_bi_age7,
-                      exwas_HILIC_bmi_28_bi_age14,exwas_C18_bmi_28_bi_age14,
-                      exwas_HILIC_bmi_28_bi_age22,exwas_C18_bmi_28_bi_age22,
-                      exwas_HILIC_bmi_28_bi_age28,exwas_C18_bmi_28_bi_age28)
+exwas_igi_28 <- rbind(exwas_HILIC_igi_28_age7,exwas_C18_igi_28_age7,
+                      exwas_HILIC_igi_28_age14,exwas_C18_igi_28_age14,
+                      exwas_HILIC_igi_28_age22,exwas_C18_igi_28_age22,
+                      exwas_HILIC_igi_28_age28,exwas_C18_igi_28_age28)
 
 
 conf_met <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/confirmed_metabolites.csv",fileEncoding = "Latin1")
@@ -651,7 +647,7 @@ conf_met_C18 <- conf_met[conf_met$Method.RT == "C18-",]
 stage4_hilic <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/Stage4.csv")
 stage4_c18 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/Stage4.csv")
 
-all_sig_hits <- exwas_bmi_28_bi
+all_sig_hits <- exwas_igi_28
 all_sig_hits$chemical_ID <- rep(NA_character_, dim(all_sig_hits)[1])
 all_sig_hits$Annotation.confidence.score <- rep(NA_character_, dim(all_sig_hits)[1])
 all_sig_hits$Name <- rep(NA_character_, dim(all_sig_hits)[1])
@@ -723,7 +719,7 @@ all_sig_hit <- all_sig_hits[, c("Met_id", "Beta" , "Std.Error", "z.value" , "p.v
                                 "Class" , "Mode", 
                                 "age" , "chemical_ID" ,"Name",
                                 "Adduct")]
-write.csv(all_sig_hits, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_allsig_metabolites_bmi_28_bi.csv", row.names = F )
+write.csv(all_sig_hits, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_allsig_metabolites_igi_28.csv", row.names = F )
 
 ##########################################################################################
 ##########################################################################################
@@ -732,30 +728,30 @@ write.csv(all_sig_hits, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New
 # significant Metabolites plot
 # Without the ones at age 28
 
-exwas_bmi_28_bi <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/exwas_allsig_metabolites_bmi_28_bi.csv")
-exwas_bmi_28_bi <- exwas_bmi_28_bi[exwas_bmi_28_bi$age!= "Age 28",]
+exwas_igi_28 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/exwas_allsig_metabolites_igi_28.csv")
+exwas_igi_28 <- exwas_igi_28[exwas_igi_28$age!= "Age 28",]
   
-exwas_bmi_28_bi$log10.p.value <- -log(exwas_bmi_28_bi$p.value,10)
-exwas_bmi_28_bi$age <- factor(exwas_bmi_28_bi$age, levels = c('Age 7','Age 14', 'Age 22'))
+exwas_igi_28$log10.p.value <- -log(exwas_igi_28$p.value,10)
+exwas_igi_28$age <- factor(exwas_igi_28$age, levels = c('Age 7', 'Age 14', 'Age 22'))
 
-exwas_bmi_28_bi$Metabolite <- rep(NA_character_,nrow(exwas_bmi_28_bi))
+exwas_igi_28$Metabolite <- rep(NA_character_,nrow(exwas_igi_28))
 
-for(i in 1:nrow(exwas_bmi_28_bi)) exwas_bmi_28_bi$Metabolite[i] <- strsplit(exwas_bmi_28_bi$Name,"/")[[i]][1]
+for(i in 1:nrow(exwas_igi_28)) exwas_igi_28$Metabolite[i] <- strsplit(exwas_igi_28$Name,"/")[[i]][1]
 
-exwas_bmi_28_bi<- exwas_bmi_28_bi %>% # if there are duplicates, only keep one metabolite with lowest p.value at each timepoint
+exwas_igi_28<- exwas_igi_28 %>% # if there are duplicates, only keep one metabolite with lowest p.value at each timepoint
   arrange(age, p.value)%>%
   group_by(age) %>% 
   distinct(Metabolite, .keep_all = TRUE) 
 
 
 pal <- wes_palette("Zissou1", 100, type = "continuous")
-vol <- (ggplot(exwas_bmi_28_bi, aes(x=age, y=Beta, color=log10.p.value, label=Metabolite, shape = Mode)) +# Show all points
+vol <- (ggplot(exwas_igi_28, aes(x=age, y=Beta, color=log10.p.value, label=Metabolite, shape = Mode)) +# Show all points
           geom_point(size = 3)+  
           scale_shape_manual(values = c(15,17)) + # change shape
-          geom_hline(yintercept= 1, color = "black", size = 1 )   +
+          geom_hline(yintercept= 0, color = "black", size = 1 )   +
           scale_color_gradientn(colours = pal) + # change color
-          labs(x = "Age at metabolomic assessment", y = "OR", 
-               title = "(A) Prospective metabolic exposures and Overweight at age 28",
+          labs(x = "Age at metabolomic assessment", y = "Beta Coefficients", 
+               title = "(A) Prospective metabolic exposures and IGI at age 28",
                col = "-log10(p.value)") +
           theme_bw()+
           geom_label_repel(size = 6, family = 'serif',
@@ -776,21 +772,21 @@ vol <-  (vol + theme(plot.title=element_text(size=16,face="bold"),
                      legend.background = element_rect(fill="white", 
                                                       linewidth=0.5, linetype="solid",  colour ="darkblue"),
                      plot.margin=unit(c(0.5,0.5,1,1.5), "cm")) +
-               ylim(c(-0.5,2.5)) +
-               annotate("rect", xmin = c(0.75, 1.75, 2.75), 
+           ylim(c(-0.3,0.3)) +
+           annotate("rect", xmin = c(0.75, 1.75, 2.75), 
                     xmax = c(1.25, 2.25, 3.25), 
-                    ymin = c(-0.5, -0.5, -0.5), 
-                    ymax = c(2.5, 2.5, 2.5),
+                    ymin = c(-0.3, -0.3, -0.3), 
+                    ymax = c(0.3, 0.3, 0.3),
                     alpha = 0.05))
 
 
-jpeg("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/plot_allsig_metabolites_bmi_28_bi.jpeg",
-     units="in", width=20, height=10, res=600)
+
+jpeg("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/plot_allsig_metabolites_igi_28.jpeg",
+     units="in", width=15, height=10, res=600)
 
 vol
 
 dev.off()
-
 
 
 ##########################################################################################
@@ -800,53 +796,56 @@ dev.off()
 
 # Pathway Plot
 
-C18_bmi_28_bi_age7  <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/metaboanalyst/mummichog_pathway_enrichment_C18_bmi_28_bi_age7.csv")
-C18_bmi_28_bi_age7 <- C18_bmi_28_bi_age7[C18_bmi_28_bi_age7$Hits.sig >=3 ,]
-C18_bmi_28_bi_age7$age <- rep(7, nrow(C18_bmi_28_bi_age7))
+C18_igi_28_age7  <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/metaboanalyst/mummichog_pathway_enrichment_C18_igi_28_age7.csv")
+C18_igi_28_age7 <- C18_igi_28_age7[C18_igi_28_age7$Hits.sig >=3 ,]
+C18_igi_28_age7$age <- rep(7, nrow(C18_igi_28_age7))
 
-C18_bmi_28_bi_age14  <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/metaboanalyst/mummichog_pathway_enrichment_C18_bmi_28_bi_age14.csv")
-C18_bmi_28_bi_age14 <- C18_bmi_28_bi_age14[C18_bmi_28_bi_age14$Hits.sig >=3 ,]
-C18_bmi_28_bi_age14$age <- rep(14, nrow(C18_bmi_28_bi_age14))
+C18_igi_28_age14  <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/metaboanalyst/mummichog_pathway_enrichment_C18_igi_28_age14.csv")
+C18_igi_28_age14 <- C18_igi_28_age14[C18_igi_28_age14$Hits.sig >=3 ,]
+C18_igi_28_age14$age <- rep(14, nrow(C18_igi_28_age14))
 
-C18_bmi_28_bi_age22  <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/metaboanalyst/mummichog_pathway_enrichment_C18_bmi_28_bi_age22.csv")
-C18_bmi_28_bi_age22 <- C18_bmi_28_bi_age22[C18_bmi_28_bi_age22$Hits.sig >=3 ,]
-C18_bmi_28_bi_age22$age <- rep(22, nrow(C18_bmi_28_bi_age22))
+C18_igi_28_age22  <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/metaboanalyst/mummichog_pathway_enrichment_C18_igi_28_age22.csv")
+C18_igi_28_age22 <- C18_igi_28_age22[C18_igi_28_age22$Hits.sig >=3 ,]
+C18_igi_28_age22$age <- rep(22, nrow(C18_igi_28_age22))
 
-C18_bmi_28_bi <- rbind(C18_bmi_28_bi_age7,C18_bmi_28_bi_age14, C18_bmi_28_bi_age22)
-C18_bmi_28_bi$Mode <- rep("C18-", nrow(C18_bmi_28_bi))
+C18_igi_28 <- rbind(C18_igi_28_age7,C18_igi_28_age14, C18_igi_28_age22)
+C18_igi_28$Mode <- rep("C18-", nrow(C18_igi_28))
 
 
-HILIC_bmi_28_bi_age7  <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/metaboanalyst/mummichog_pathway_enrichment_HILIC_bmi_28_bi_age7.csv")
-HILIC_bmi_28_bi_age7 <- HILIC_bmi_28_bi_age7[HILIC_bmi_28_bi_age7$Hits.sig >=3 ,]
-HILIC_bmi_28_bi_age7$age <- rep(7, nrow(HILIC_bmi_28_bi_age7))
+HILIC_igi_28_age7  <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/metaboanalyst/mummichog_pathway_enrichment_HILIC_igi_28_age7.csv")
+HILIC_igi_28_age7 <- HILIC_igi_28_age7[HILIC_igi_28_age7$Hits.sig >=3 ,]
+HILIC_igi_28_age7$age <- rep(7, nrow(HILIC_igi_28_age7))
 
-HILIC_bmi_28_bi_age14  <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/metaboanalyst/mummichog_pathway_enrichment_HILIC_bmi_28_bi_age14.csv")
-HILIC_bmi_28_bi_age14 <- HILIC_bmi_28_bi_age14[HILIC_bmi_28_bi_age14$Hits.sig >=3 ,]
-HILIC_bmi_28_bi_age14$age <- rep(14, nrow(HILIC_bmi_28_bi_age14))
+HILIC_igi_28_age14  <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/metaboanalyst/mummichog_pathway_enrichment_HILIC_igi_28_age14.csv")
+HILIC_igi_28_age14 <- HILIC_igi_28_age14[HILIC_igi_28_age14$Hits.sig >=3 ,]
+HILIC_igi_28_age14$age <- rep(14, nrow(HILIC_igi_28_age14))
 
-HILIC_bmi_28_bi_age22  <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28_bi/metaboanalyst/mummichog_pathway_enrichment_HILIC_bmi_28_bi_age22.csv")
-HILIC_bmi_28_bi_age22 <- HILIC_bmi_28_bi_age22[HILIC_bmi_28_bi_age22$Hits.sig >=3 ,]
-HILIC_bmi_28_bi_age22$age <- rep(22, nrow(HILIC_bmi_28_bi_age22))
+HILIC_igi_28_age22  <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/igi/igi_28/metaboanalyst/mummichog_pathway_enrichment_HILIC_igi_28_age22.csv")
+HILIC_igi_28_age22 <- HILIC_igi_28_age22[HILIC_igi_28_age22$Hits.sig >=3 ,]
+HILIC_igi_28_age22$age <- rep(22, nrow(HILIC_igi_28_age22))
 
-HILIC_bmi_28_bi <- rbind(HILIC_bmi_28_bi_age7,HILIC_bmi_28_bi_age14, HILIC_bmi_28_bi_age22)
-HILIC_bmi_28_bi$Mode <- rep("HILIC+", nrow(HILIC_bmi_28_bi))
+HILIC_igi_28 <- rbind(HILIC_igi_28_age7,HILIC_igi_28_age14, HILIC_igi_28_age22)
+HILIC_igi_28$Mode <- rep("HILIC+", nrow(HILIC_igi_28))
 
-pathways_bmi_28_bi <- rbind(C18_bmi_28_bi, HILIC_bmi_28_bi)
-colnames(pathways_bmi_28_bi)[1] <- "Pathways"
-pathways_bmi_28_bi$age <- factor(pathways_bmi_28_bi$age, levels = c("7","14","22"))
+pathways_igi_28 <- rbind(C18_igi_28, HILIC_igi_28)
+colnames(pathways_igi_28)[1] <- "Pathways"
+pathways_igi_28$age <- factor(pathways_igi_28$age, levels = c("14","22"))
 
-pfas_pathway_subset <- pathways_bmi_28_bi[pathways_bmi_28_bi$FET < 0.05,]
+pfas_pathway_subset <- pathways_igi_28[pathways_igi_28$FET < 0.05,]
 
 all_pathways <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/all_pathways.csv")
 pfas_pathway_subset <- merge(pfas_pathway_subset, all_pathways, by.x = "Pathways")
+
 pfas_pathway_subset$Group <- factor(pfas_pathway_subset$Group, levels = c("Carbohydrate metabolism",
                                                                           "Lipid metabolism",
-                                                                          "Metabolism of amino acids and derivatives"
+                                                                          "Metabolism of amino acids and derivatives", 
+                                                                          "Nucleotide metabolism"
                                                                           ))
 
 groups <- c("Carbohydrate metabolism",
             "Lipid metabolism",
-            "Metabolism of amino acids and derivatives")
+            "Metabolism of amino acids and derivatives", 
+            "Nucleotide metabolism")
             
 pfas_pathway_subset <- pfas_pathway_subset[order(pfas_pathway_subset$Group),]
 uni_paths <- pfas_pathway_subset$Pathways
@@ -855,8 +854,8 @@ pfas_pathway_subset$Pathways <- factor(pfas_pathway_subset$Pathways, levels = un
 
 ret <- c(length(unique(pfas_pathway_subset$Pathways[pfas_pathway_subset$Group ==  unique(pfas_pathway_subset$Group)[1]])),
          length(unique(pfas_pathway_subset$Pathways[pfas_pathway_subset$Group ==  unique(pfas_pathway_subset$Group)[2]])),
-         length(unique(pfas_pathway_subset$Pathways[pfas_pathway_subset$Group ==  unique(pfas_pathway_subset$Group)[3]]))
-         )
+         length(unique(pfas_pathway_subset$Pathways[pfas_pathway_subset$Group ==  unique(pfas_pathway_subset$Group)[3]])),
+         length(unique(pfas_pathway_subset$Pathways[pfas_pathway_subset$Group ==  unique(pfas_pathway_subset$Group)[4]])))
 
 gp <- (ggplot(pfas_pathway_subset, aes(x = age,  y = Pathways)) + 
          geom_point(aes(size = -log(FET , base = 10), shape = Mode), 
@@ -864,7 +863,7 @@ gp <- (ggplot(pfas_pathway_subset, aes(x = age,  y = Pathways)) +
                     position = position_dodge2(width = 0.5, preserve  = "total", padding = 0.5, reverse = T)) + 
          theme_bw()   + scale_shape_manual(values = c(15,17)) +
          ylab(NULL) + xlab("Age at Metabolomic Assessment") +
-         ggtitle("(B) Enriched pathways in association between\nserum Metabolites and Overweight at age 28") + labs(size = "-log10(p.value)") 
+         ggtitle("(B) Enriched pathways in association between\nserum Metabolites and IGI at age 28") + labs(size = "-log10(p.value)") 
        + theme(plot.title=element_text(size=16,face="bold"), axis.title=element_text(size=14,face="bold"),
                plot.tag = element_text(size = 13,face = "bold"),
                axis.text.y = element_text(size=15,face="bold"),
@@ -875,24 +874,25 @@ gp <- (ggplot(pfas_pathway_subset, aes(x = age,  y = Pathways)) +
                legend.background = element_rect(fill="white", 
                                                 size=0.5, linetype="solid",  colour ="darkblue"),
                plot.margin=unit(c(0.5,0.5,1,0.5), "cm"))
-       +  annotate("rect", xmin = c(0.75,1.75,2.75), 
-                   xmax = c(1.25,2.25,3.25), 
-                   ymin = rep(0,3), ymax =rep(7,3),
+       +  annotate("rect", xmin = c(0.75,1.75), 
+                   xmax = c(1.25,2.25), 
+                   ymin = rep(0,2), ymax =rep(6,2),
                    alpha = .1)  
        + guides(color = guide_legend(override.aes = list(size = 4)),
                 shape = guide_legend(override.aes = list(size = 4))))
 
 gp <- (gp +  geom_hline(yintercept = c(cumsum(ret))+0.5)
-       + geom_hline(yintercept = 7, size = 2)
+       + geom_hline(yintercept = 6, size = 2)
        + annotate("text", x = rep(4.9, length(unique(pfas_pathway_subset$Group))), 
-                  y = c(0.8, 2.0, 4.8), 
+                  y = c(0.8, 2, 3.5, 5), 
                   label = c("Carbohydrate metabolism",
                             "Lipid metabolism",
-                            "Metabolism of amino acids\nand derivatives"), color = "red",
+                            "Metabolism of amino acids\nand derivatives", 
+                            "Nucleotide metabolism"), color = "red",
                   size = rep(5, length(groups)), fontface  = 'bold')
-       + coord_cartesian(xlim = c(1.2, 6), ylim = c(0.5, 6.5), clip = "off") )
+       + coord_cartesian(xlim = c(1.2, 6), ylim = c(0.5, 5.5), clip = "off") )
 
-jpeg("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese//hrm_clinical_outcome/bmi/bmi_28_bi/pathways_bmi_28_bi.jpeg",
+jpeg("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese//hrm_clinical_outcome/igi/igi_28/pathways_igi_28.jpeg",
      units="in", width=12, height=10, res=600)
 
 gp
@@ -903,7 +903,7 @@ dev.off()
 
 # combine plots
 
-jpeg("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese//hrm_clinical_outcome/bmi/bmi_28_bi/plot_metabolites_pathways_bmi_28_bi.jpeg",
+jpeg("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese//hrm_clinical_outcome/igi/igi_28/plot_metabolites_pathways_igi_28.jpeg",
      units="in", width=32, height=15, res=800)
 
 ggpubr::ggarrange(vol, gp, nrow = 1, ncol = 2, common.legend = F, 
