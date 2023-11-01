@@ -836,6 +836,13 @@ pfas_pathway_subset <- pathways_bmi_28[pathways_bmi_28$FET < 0.05,]
 
 all_pathways <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/all_pathways.csv")
 pfas_pathway_subset <- merge(pfas_pathway_subset, all_pathways, by.x = "Pathways")
+write.csv(pfas_pathway_subset, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28/allsig_pathway_bmi_28.csv", row.names = F )
+
+
+
+
+
+pfas_pathway_subset<- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/bmi/bmi_28/allsig_pathway_bmi_28.csv")
 
 pfas_pathway_subset$Group <- factor(pfas_pathway_subset$Group, levels = c("Carbohydrate metabolism",
                                                                           "Metabolism of amino acids and derivatives",

@@ -151,6 +151,11 @@ write.csv(data.hypertension_28_bi.met_age7,
 
 ### calculate p.value based on number of effect test
 exwas_HILIC_hypertension_28_bi_age7 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/hypertension/hypertension_28_bi/exwas_HILIC_hypertension_28_bi_age7.csv")
+
+
+length(exwas_HILIC_hypertension_28_bi_age7$Met_id[exwas_HILIC_hypertension_28_bi_age7$p.value < 0.05])
+
+
 exwas_HILIC_hypertension_28_bi_age7$Mode <- rep("HILIC",nrow(exwas_HILIC_hypertension_28_bi_age7))
 
 ght <- cor(cbind(merged_omics_HILIC_age7[,paste0("Met",seq(1:nrow(data_HILIC)))]))
@@ -208,6 +213,11 @@ write.csv(data.hypertension_28_bi.met_age7,
           row.names = F)
 
 exwas_C18_hypertension_28_bi_age7 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/hypertension/hypertension_28_bi/exwas_C18_hypertension_28_bi_age7.csv")
+
+length(exwas_C18_hypertension_28_bi_age7$Met_id[exwas_C18_hypertension_28_bi_age7$p.value < 0.05])
+
+
+
 exwas_C18_hypertension_28_bi_age7$Mode <- rep("C18",nrow(exwas_C18_hypertension_28_bi_age7))
 
 ght <- cor(cbind(merged_omics_C18_age7[,paste0("Met",seq(1:nrow(data_C18)))]))
@@ -269,6 +279,10 @@ write.csv(data.hypertension_28_bi.met_age14,
           row.names = F)
 
 exwas_HILIC_hypertension_28_bi_age14 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/hypertension/hypertension_28_bi/exwas_HILIC_hypertension_28_bi_age14.csv")
+length(exwas_HILIC_hypertension_28_bi_age14$Met_id[exwas_HILIC_hypertension_28_bi_age14$p.value < 0.05])
+
+
+
 exwas_HILIC_hypertension_28_bi_age14$Mode <- rep("HILIC",nrow(exwas_HILIC_hypertension_28_bi_age14))
 
 ght <- cor(cbind(merged_omics_HILIC_age14[,paste0("Met",seq(1:nrow(data_HILIC)))]))
@@ -326,6 +340,9 @@ write.csv(data.hypertension_28_bi.met_age14,
           row.names = F)
 
 exwas_C18_hypertension_28_bi_age14 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/hypertension/hypertension_28_bi/exwas_C18_hypertension_28_bi_age14.csv")
+length(exwas_C18_hypertension_28_bi_age14$Met_id[exwas_C18_hypertension_28_bi_age14$p.value < 0.05])
+
+
 exwas_C18_hypertension_28_bi_age14$Mode <- rep("C18",nrow(exwas_C18_hypertension_28_bi_age14))
 
 ght <- cor(cbind(merged_omics_C18_age14[,paste0("Met",seq(1:nrow(data_C18)))]))
@@ -387,6 +404,9 @@ write.csv(data.hypertension_28_bi.met_age22,
           row.names = F)
 
 exwas_HILIC_hypertension_28_bi_age22 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/hypertension/hypertension_28_bi/exwas_HILIC_hypertension_28_bi_age22.csv")
+length(exwas_HILIC_hypertension_28_bi_age22$Met_id[exwas_HILIC_hypertension_28_bi_age22$p.value < 0.05])
+
+
 exwas_HILIC_hypertension_28_bi_age22$Mode <- rep("HILIC",nrow(exwas_HILIC_hypertension_28_bi_age22))
 
 ght <- cor(cbind(merged_omics_HILIC_age22[,paste0("Met",seq(1:nrow(data_HILIC)))]))
@@ -444,6 +464,9 @@ write.csv(data.hypertension_28_bi.met_age22,
           row.names = F)
 
 exwas_C18_hypertension_28_bi_age22 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/hypertension/hypertension_28_bi/exwas_C18_hypertension_28_bi_age22.csv")
+length(exwas_C18_hypertension_28_bi_age22$Met_id[exwas_C18_hypertension_28_bi_age22$p.value < 0.05])
+
+
 exwas_C18_hypertension_28_bi_age22$Mode <- rep("C18",nrow(exwas_C18_hypertension_28_bi_age22))
 
 ght <- cor(cbind(merged_omics_C18_age22[,paste0("Met",seq(1:nrow(data_C18)))]))
@@ -809,11 +832,7 @@ C18_hypertension_28_bi_age14  <- read.csv("C:/Users/yaom03/OneDrive - The Mount 
 C18_hypertension_28_bi_age14 <- C18_hypertension_28_bi_age14[C18_hypertension_28_bi_age14$Hits.sig >=3 ,]
 C18_hypertension_28_bi_age14$age <- rep(14, nrow(C18_hypertension_28_bi_age14))
 
-C18_hypertension_28_bi_age22  <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/hypertension/hypertension_28_bi/metaboanalyst/mummichog_pathway_enrichment_C18_hypertension_28_bi_age22.csv")
-C18_hypertension_28_bi_age22 <- C18_hypertension_28_bi_age22[C18_hypertension_28_bi_age22$Hits.sig >=3 ,]
-C18_hypertension_28_bi_age22$age <- rep(22, nrow(C18_hypertension_28_bi_age22))
-
-C18_hypertension_28_bi <- rbind(C18_hypertension_28_bi_age7,C18_hypertension_28_bi_age14, C18_hypertension_28_bi_age22)
+C18_hypertension_28_bi <- rbind(C18_hypertension_28_bi_age7,C18_hypertension_28_bi_age14)
 C18_hypertension_28_bi$Mode <- rep("C18-", nrow(C18_hypertension_28_bi))
 
 
@@ -841,6 +860,10 @@ pfas_pathway_subset <- pathways_hypertension_28_bi[pathways_hypertension_28_bi$F
 all_pathways <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/all_pathways.csv")
 pfas_pathway_subset <- merge(pfas_pathway_subset, all_pathways, by.x = "Pathways")
 
+write.csv(pfas_pathway_subset, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/hypertension/hypertension_28_bi/allsig_pathway_hypertension_28_bi.csv", row.names = F )
+
+
+pfas_pathway_subset<- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/hypertension/hypertension_28_bi/allsig_pathway_hypertension_28_bi.csv")
 pfas_pathway_subset$Group <- factor(pfas_pathway_subset$Group, levels = c("Carbohydrate metabolism",
                                                                           "Lipid metabolism",
                                                                           "Metabolism of amino acids and derivatives",
@@ -885,22 +908,22 @@ gp <- (ggplot(pfas_pathway_subset, aes(x = age,  y = Pathways)) +
                plot.margin=unit(c(0.5,0.5,1,0.5), "cm"))
        +  annotate("rect", xmin = c(0.75,1.75,2.75), 
                    xmax = c(1.25,2.25,3.25), 
-                   ymin = rep(0,3), ymax =rep(13.5,3),
+                   ymin = rep(0,3), ymax =rep(10.5,3),
                    alpha = .1)  
        + guides(color = guide_legend(override.aes = list(size = 4)),
                 shape = guide_legend(override.aes = list(size = 4))))
 
 gp <- (gp +  geom_hline(yintercept = c(cumsum(ret))+0.5)
-       + geom_hline(yintercept = 13.5, size = 2)
+       + geom_hline(yintercept = 10.5, size = 2)
        + annotate("text", x = rep(4.9, length(unique(pfas_pathway_subset$Group))), 
-                  y = c(2.5, 5, 7, 9.5, 11.5), 
+                  y = c(1.5, 3, 5, 7, 8.5), 
                   label = c("Carbohydrate metabolism",
                             "Lipid metabolism",
                             "Metabolism of amino acids\nand derivatives",
                             "Metabolism of vitamins\nand cofactors",
                             "Nucleotide metabolism"), color = "red",
                   size = rep(5, length(groups)), fontface  = 'bold')
-       + coord_cartesian(xlim = c(1.2, 6), ylim = c(0.5, 13), clip = "off") )
+       + coord_cartesian(xlim = c(1.2, 6), ylim = c(0.5, 10), clip = "off") )
 
 jpeg("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese//hrm_clinical_outcome/hypertension/hypertension_28_bi/pathways_hypertension_28_bi.jpeg",
      units="in", width=12, height=10, res=600)

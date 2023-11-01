@@ -835,6 +835,10 @@ pfas_pathway_subset <- pathways_insulinauc_28y[pathways_insulinauc_28y$FET < 0.0
 
 all_pathways <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/all_pathways.csv")
 pfas_pathway_subset <- merge(pfas_pathway_subset, all_pathways, by.x = "Pathways")
+write.csv(pfas_pathway_subset, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/insulinauc/insulinauc_28y/allsig_pathway_insulinauc_28y.csv", row.names = F )
+
+
+pfas_pathway_subset<- read.csv( "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/insulinauc/insulinauc_28y/allsig_pathway_insulinauc_28y.csv")
 
 pfas_pathway_subset$Group <- factor(pfas_pathway_subset$Group, levels = c("Carbohydrate metabolism",
                                                                           "Lipid metabolism",

@@ -147,6 +147,9 @@ write.csv(data.matsuda_28.met_age7,
 
 ### calculate p.value based on number of effect test
 exwas_HILIC_matsuda_28_age7 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/matsuda/matsuda_28/exwas_HILIC_matsuda_28_age7.csv")
+length(exwas_HILIC_matsuda_28_age7$Met_id[exwas_HILIC_matsuda_28_age7$p.value < 0.05])
+
+
 exwas_HILIC_matsuda_28_age7$Mode <- rep("HILIC",nrow(exwas_HILIC_matsuda_28_age7))
 
 ght <- cor(cbind(merged_omics_HILIC_age7[,paste0("Met",seq(1:nrow(data_HILIC)))]))
@@ -204,6 +207,9 @@ write.csv(data.matsuda_28.met_age7,
           row.names = F)
 
 exwas_C18_matsuda_28_age7 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/matsuda/matsuda_28/exwas_C18_matsuda_28_age7.csv")
+length(exwas_C18_matsuda_28_age7$Met_id[exwas_C18_matsuda_28_age7$p.value < 0.05])
+
+
 exwas_C18_matsuda_28_age7$Mode <- rep("C18",nrow(exwas_C18_matsuda_28_age7))
 
 ght <- cor(cbind(merged_omics_C18_age7[,paste0("Met",seq(1:nrow(data_C18)))]))
@@ -265,6 +271,9 @@ write.csv(data.matsuda_28.met_age14,
           row.names = F)
 
 exwas_HILIC_matsuda_28_age14 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/matsuda/matsuda_28/exwas_HILIC_matsuda_28_age14.csv")
+length(exwas_HILIC_matsuda_28_age14$Met_id[exwas_HILIC_matsuda_28_age14$p.value < 0.05])
+
+
 exwas_HILIC_matsuda_28_age14$Mode <- rep("HILIC",nrow(exwas_HILIC_matsuda_28_age14))
 
 ght <- cor(cbind(merged_omics_HILIC_age14[,paste0("Met",seq(1:nrow(data_HILIC)))]))
@@ -322,6 +331,9 @@ write.csv(data.matsuda_28.met_age14,
           row.names = F)
 
 exwas_C18_matsuda_28_age14 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/matsuda/matsuda_28/exwas_C18_matsuda_28_age14.csv")
+length(exwas_C18_matsuda_28_age14$Met_id[exwas_C18_matsuda_28_age14$p.value < 0.05])
+
+
 exwas_C18_matsuda_28_age14$Mode <- rep("C18",nrow(exwas_C18_matsuda_28_age14))
 
 ght <- cor(cbind(merged_omics_C18_age14[,paste0("Met",seq(1:nrow(data_C18)))]))
@@ -383,6 +395,9 @@ write.csv(data.matsuda_28.met_age22,
           row.names = F)
 
 exwas_HILIC_matsuda_28_age22 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/matsuda/matsuda_28/exwas_HILIC_matsuda_28_age22.csv")
+length(exwas_HILIC_matsuda_28_age22$Met_id[exwas_HILIC_matsuda_28_age22$p.value < 0.05])
+
+
 exwas_HILIC_matsuda_28_age22$Mode <- rep("HILIC",nrow(exwas_HILIC_matsuda_28_age22))
 
 ght <- cor(cbind(merged_omics_HILIC_age22[,paste0("Met",seq(1:nrow(data_HILIC)))]))
@@ -440,6 +455,10 @@ write.csv(data.matsuda_28.met_age22,
           row.names = F)
 
 exwas_C18_matsuda_28_age22 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/matsuda/matsuda_28/exwas_C18_matsuda_28_age22.csv")
+length(exwas_C18_matsuda_28_age22$Met_id[exwas_C18_matsuda_28_age22$p.value < 0.05])
+
+
+
 exwas_C18_matsuda_28_age22$Mode <- rep("C18",nrow(exwas_C18_matsuda_28_age22))
 
 ght <- cor(cbind(merged_omics_C18_age22[,paste0("Met",seq(1:nrow(data_C18)))]))
@@ -834,6 +853,10 @@ pfas_pathway_subset <- pathways_matsuda_28[pathways_matsuda_28$FET < 0.05,]
 
 all_pathways <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/all_pathways.csv")
 pfas_pathway_subset <- merge(pfas_pathway_subset, all_pathways, by.x = "Pathways")
+write.csv(pfas_pathway_subset, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/matsuda/matsuda_28/allsig_pathway_matsuda_28.csv", row.names = F )
+
+
+pfas_pathway_subset<- read.csv( "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/hrm_clinical_outcome/matsuda/matsuda_28/allsig_pathway_matsuda_28.csv")
 
 pfas_pathway_subset$Group <- factor(pfas_pathway_subset$Group, levels = c("Carbohydrate metabolism",
                                                                           "Lipid metabolism",
